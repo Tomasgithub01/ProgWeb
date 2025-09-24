@@ -15,9 +15,8 @@ generate:
 
 #db/migrate:
 
-build: generate
+build:
 	@echo ">= Building application..."
-	@go build -o $(APP_NAME) .
-
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o $(APP_NAME) .
 clean:
 	@rm -f $(APP_NAME)

@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: tpespecial_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: "#Admin20250915"
+      POSTGRES_DB: tpespecialweb
+    ports:
+      - "5434:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/schema:/docker-entrypoint-initdb.d/schema
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: tpespecial_app
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: "postgres://admin:#Admin20250915@db:5432/tpespecialweb?sslmode=disable"
+    restart: unless-stopped
+
+volumes:
+  db_data:
