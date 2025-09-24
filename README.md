@@ -59,14 +59,15 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
 
 ```text
 ProgWeb/
-├── db/                 # Esquemas, queries y código Go generado por SQLC
-├── .air.toml           # Archivo para automatizar los cambios en el código
-├── .gitignore          # Archivos de dependencias a ignorar
-├── index.html          # Página principal de la app
-├── main.go             # Código principal en Go (servidor HTTP)
-├── go.mod              # Dependencias de Go
-├── Dockerfile          # Imagen para la app en Go
-├── docker-compose.yml  # Configuración de contenedores
-├── Makefile            # Comandos auxiliares
-├── sqlc.yml            # Archivo de configuración de SQLC
-└── README.md           # Documentación del proyecto
+├── db/                               # Esquemas, queries y código Go generado por SQLC
+├── .air.toml                         # Archivo para automatizar los cambios en el código
+├── .gitignore                        # Archivos de dependencias a ignorar
+├── index.html                        # Página principal de la app
+├── main.go                           # Código principal en Go (servidor HTTP)
+├── go.mod                            # Dependencias de Go
+├── Dockerfile                        # Imagen para la app en Go
+├── Explicacion de la Aplicación.pdf  # Documento breve donde se detalla el funcionamiento de la app
+├── docker-compose.yml                # Configuración de contenedores
+├── Makefile                          # Comandos auxiliares
+├── sqlc.yml                          # Archivo de configuración de SQLC
+└── README.md                         # Documentación del proyecto
