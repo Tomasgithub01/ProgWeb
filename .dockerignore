@@ -1,0 +1,40 @@
+# Archivos y carpetas de dependencias
+vendor/
+node_modules/
+
+# Binarios compilados
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.o
+
+# Archivos generados por Go
+*.log
+*.tmp
+
+# Archivos locales de configuración
+.env
+*.local
+# *.toml
+# *.yaml
+#*.yml
+
+# Archivos de Git
+.git
+.gitignore
+
+# Archivos de IDEs / editores
+.vscode/
+.idea/
+*.swp
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Documentación y PDFs
+*.pdf
+README.md
