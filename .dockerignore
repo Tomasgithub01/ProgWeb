@@ -20,7 +20,7 @@ node_modules/
 *.local
 # *.toml
 # *.yaml
-#*.yml
+# *.yml
 
 # Archivos de Git
 .git
