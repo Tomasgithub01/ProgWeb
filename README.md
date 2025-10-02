@@ -13,7 +13,7 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
 - Tener instalado un editor de texto, por ejemplo, [VSCode](https://code.visualstudio.com/download).  
 - Tener instalado un compilador de [Go](https://go.dev/doc/install). Se recomienda la última versión.  
 - Tener instalado [Git](https://git-scm.com/downloads) para clonar el repositorio.  
-- Tener instalada la última versión de Docker y Docker Compose. El proyecto fue testeado con **Docker Compose v2.24.5**.
+- Tener instalada la última versión de [Docker](https://docs.docker.com/engine/install/ubuntu/) y [Docker Compose](https://docs.docker.com/compose/install/linux/#install-using-the-repository). El proyecto fue testeado con **Docker Compose v2.24.5**.
 
 ---
 
@@ -39,8 +39,9 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
     - Construir e iniciar los contenedores:
 
       ```bash
-      docker compose up --build
+      sudo docker compose up --build
       ```
+        [Pasos para evitar anteponer sudo](https://docs.docker.com/engine/install/linux-postinstall/)
 
     - Abrir el navegador en:  
       ```
@@ -49,8 +50,10 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
 
     - Para detener los contenedores después de su uso:
 
+      Ctrl + C en la terminal que está corriendo y luego:
+      
       ```bash
-      docker compose down
+      sudo docker compose down
       ```
 
 ---
