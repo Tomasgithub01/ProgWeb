@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	db "github.com/Tomasgithub01/ProgWeb/db/sqlc"
+	db "ProgWeb/db/sqlc"
 )
 
 func ValidateGame(g db.Game) error {
