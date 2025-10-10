@@ -1,7 +1,7 @@
 -- name: CreateGame :one
-INSERT INTO game (name, description, image) 
-VALUES ($1, $2, $3)
-RETURNING id, name, description, image;
+INSERT INTO game (name, description, image, link) 
+VALUES ($1, $2, $3, $4)
+RETURNING id, name, description, image, link;
 
 -- name: GetGame :one
 SELECT * 
@@ -15,7 +15,7 @@ ORDER BY name;
 
 -- name: UpdateGame :exec
 UPDATE game 
-SET name = $2, description = $3, image = $4
+SET name = $2, description = $3, image = $4 ,  link = $5
 WHERE id = $1;
 
 -- name: Delete :exec
@@ -23,13 +23,13 @@ DELETE FROM game
 WHERE id = $1;
 
 -- name: CreateUser :one
-INSERT INTO user (name, password)
+INSERT INTO users (name, password)
 VALUES ($1, $2)
 RETURNING id, name, password;
 
 -- name: GetUser :one
 SELECT id
-FROM user
+FROM users
 WHERE name = $1 AND password = $2;
 
 -- name: CreateUserPlaysGame :one

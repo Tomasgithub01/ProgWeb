@@ -13,7 +13,18 @@ type Game struct {
 	Name        string         `json:"name"`
 	Description string         `json:"description"`
 	Image       sql.NullString `json:"image"`
-	State       interface{}    `json:"state"`
-	Rating      interface{}    `json:"rating"`
 	Link        sql.NullString `json:"link"`
+}
+
+type Play struct {
+	IDGame int32       `json:"id_game"`
+	IDUser int32       `json:"id_user"`
+	State  interface{} `json:"state"`
+	Rating interface{} `json:"rating"`
+}
+
+type User struct {
+	ID       int32  `json:"id"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
 }

@@ -1,7 +1,7 @@
 CREATE DOMAIN state AS varchar(20) 
 CHECK (VALUE = 'Stateless' 
     OR VALUE = 'Started'
-    OR VAlUE = 'Full Completed'
+    OR VALUE = 'Full Completed'
     OR VALUE = 'Abandoned');
     
 CREATE DOMAIN rating AS integer
@@ -16,11 +16,11 @@ CREATE TABLE game (
     CONSTRAINT pk_game PRIMARY KEY (id)
 );
 
-CREATE TABLE user (
+CREATE TABLE users (
     id serial not null,
     name varchar(30) not null,
     password varchar(255) not null,
-    CONSTRAINT pk_user PRIMARY KEY (id)
+    CONSTRAINT pk_users PRIMARY KEY (id)
 );
 
 CREATE TABLE plays (
@@ -37,4 +37,4 @@ ALTER TABLE plays
 
 ALTER TABLE plays
     ADD CONSTRAINT fk_plays_user
-    FOREIGN KEY (id_user) REFERENCES user (id);
+    FOREIGN KEY (id_user) REFERENCES users (id);

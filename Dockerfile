@@ -1,24 +1,26 @@
-# -------------------------
+
 # Etapa de build
-# -------------------------
 FROM golang:1.25.1-alpine AS builder
 
-# Carpeta de trabajo dentro del contenedor
+# Carpeta raiz dentro del contenedor
 WORKDIR /app
 
-# Instalar dependencias necesarias
+# Dependencias
 RUN apk add --no-cache make bash git
 
-# Copiar todo el proyecto (incluye código sqlc ya generado)
+# Copiar el protecto 
 COPY . .
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
-RUN sqlc generate
-# Construir la app Go como binario estático
+
+RUN go get github.com/lib/pq@latest
+
+
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o my-app .
 
-# -------------------------
-# Etapa final: contenedor liviano
-# -------------------------
+RUN sqlc generate
+
+
+# Contenedor
 FROM alpine:latest
 
 WORKDIR /app
@@ -26,7 +28,7 @@ WORKDIR /app
 # Copiar binario desde el builder
 COPY --from=builder /app/my-app .
 
-# Copiar archivos estáticos (HTML, etc.)
+# Copiar archivos estáticos (HTML)
 COPY index.html ./
 
 # Variables de entorno
