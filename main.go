@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 
 	sqlc "ProgWeb/db/sqlc"
 
@@ -19,7 +21,7 @@ var ctx context.Context
 
 func main() {
 	// En tu main.go, establece la conexión con tu base de datos
-	connStr := "user=admin password=#Admin20250915 dbname=tpespecialweb sslmode=disable"
+	connStr := "host=db user=admin password=#Admin20250915 dbname=tpespecialweb sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatalf("failed to connect to DB: %v", err)
@@ -31,6 +33,7 @@ func main() {
 
 	http.HandleFunc("/", handleMain)
 	http.HandleFunc("/games", gamesHandler)
+	http.HandleFunc("/games/", gameHandler)
 
 	port := ":8080"
 	fmt.Printf("Servidor escuchando en http://localhost%s\n", port)
@@ -74,9 +77,92 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(createdGame)
+	} else if r.Method == http.MethodGet {
+		games, err := queries.ListGames(ctx)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(games)
 	}
 
+}
+
+func gameHandler(w http.ResponseWriter, r *http.Request) {
+
+	parts := strings.Split(r.URL.Path, "/")
+	if len(parts) != 3 {
+		http.Error(w, "Invalid URL", http.StatusBadRequest)
+		return
+	}
+	idInt, err := strconv.Atoi(parts[2])
+	if err != nil {
+		http.Error(w, "Invalid game ID", http.StatusBadRequest)
+		return
+	}
+	id := int32(idInt)
+
+	switch r.Method {
+	case http.MethodGet:
+		getGame(w, r, id)
+	case http.MethodPut:
+		updateGame(w, r, id)
+	case http.MethodDelete:
+		deleteGame(w, r, id)
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+
+}
+
+func getGame(w http.ResponseWriter, r *http.Request, id int32) {
+	game, err := queries.GetGame(ctx, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(game)
+}
+
+func updateGame(w http.ResponseWriter, r *http.Request, id int32) {
+	var updatedGame sqlc.Game
+	err := json.NewDecoder(r.Body).Decode(&updatedGame)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = logic.ValidateGame(updatedGame)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = queries.UpdateGame(ctx, sqlc.UpdateGameParams{
+		ID:          id,
+		Name:        updatedGame.Name,
+		Description: updatedGame.Description,
+		Image:       updatedGame.Image,
+		Link:        updatedGame.Link,
+	})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func deleteGame(w http.ResponseWriter, r *http.Request, id int32) {
+	err := queries.Delete(ctx, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func handleMain(w http.ResponseWriter, r *http.Request) {
