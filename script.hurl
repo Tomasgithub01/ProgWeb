@@ -1,3 +1,13 @@
+# Borrar lo que haya en la base
+DELETE http://localhost:8080/games/1
+HTTP 204
+
+DELETE http://localhost:8080/games/2
+HTTP 204
+
+DELETE http://localhost:8080/games/3
+HTTP 204
+
 # Crear Juego 1
 POST http://localhost:8080/games
 Content-Type: application/json
@@ -46,3 +56,21 @@ HTTP/1.1 201
 GET http://localhost:8080/games
 
 HTTP/1.1 200
+
+
+# Obtener el juego con id 3
+GET http://localhost:8080/games/3
+HTTP 200
+[Asserts]
+jsonpath "$.name" == "Hollow Knight"
+
+
+# Update al juego con id 3
+PUT http://localhost:8080/games/3
+Content-Type: application/json
+{
+  "name": "Hollow Knight",
+  "image": {"String":"https://example.com/hollowknightsilksong.jpg","Valid":true},
+  "link": {"String":"https://www.hollowknight.com","Valid":true}
+}
+HTTP 200

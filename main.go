@@ -56,13 +56,13 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 		err := json.NewDecoder(r.Body).Decode(&newGame)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			http.Error(w, "Falla del JSON", http.StatusBadRequest)
 			return
 		}
 
 		err = logic.ValidateGame(newGame)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			http.Error(w, "Falla de validar el juego", http.StatusBadRequest)
 			return
 		}
 
@@ -75,7 +75,7 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 			})
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			http.Error(w, "Falla al insertar en la base", http.StatusBadRequest)
 			return
 		}
 
@@ -143,11 +143,11 @@ func updateGame(w http.ResponseWriter, r *http.Request, id int32) {
 		return
 	}
 
-	err = logic.ValidateGame(updatedGame)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+	// err = logic.ValidateGame(updatedGame)
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusBadRequest)
+	// 	return
+	// }
 
 	err = queries.UpdateGame(ctx, sqlc.UpdateGameParams{
 		ID:          id,
@@ -161,7 +161,7 @@ func updateGame(w http.ResponseWriter, r *http.Request, id int32) {
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	//.WriteHeader(http.StatusNoContent)
 }
 
 // Eliminar un juego por ID
