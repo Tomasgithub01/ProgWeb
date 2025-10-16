@@ -28,14 +28,33 @@ VALUES ($1, $2)
 RETURNING id, name, password;
 
 -- name: GetUser :one
-SELECT id
+SELECT *
 FROM users
-WHERE name = $1 AND password = $2;
+WHERE id = $1;
+
+-- name: UpdateUser :exec
+UPDATE users
+SET name = $2, password = $3
+WHERE id = $1;
+
+-- name: DeleteUser :exec
+DELETE FROM users
+WHERE id = $1;
+
+-- name: ListUsers :many
+SELECT *
+FROM users
+ORDER BY name;
 
 -- name: CreateUserPlaysGame :one
-INSERT INTO plays (id_game, id_user)
-VALUES ($1, $2)
-RETURNING id_game, id_user;
+INSERT INTO plays (id_game, id_user, state, rating)
+VALUES ($1, $2, $3, $4)
+RETURNING id_game, id_user, state, rating;
+
+-- name: GetUserPlaysGame :one
+SELECT *
+FROM plays
+WHERE id_game = $1 AND id_user = $2;
 
 -- name: UpdateState :exec
 UPDATE plays
@@ -55,3 +74,13 @@ WHERE id_game = $1;
 -- name: DeleteUserPlaysGame :exec
 DELETE FROM plays
 WHERE id_game = $1 AND id_user = $2;
+
+-- name: UpdateUserPlaysGame :exec
+UPDATE plays
+SET state = $3, rating = $4
+WHERE id_game = $1 AND id_user = $2;
+
+-- name: ListUserPlaysGames :many
+SELECT *
+FROM plays
+ORDER BY id_game, id_user;

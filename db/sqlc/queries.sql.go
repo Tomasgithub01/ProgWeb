@@ -73,25 +73,32 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const createUserPlaysGame = `-- name: CreateUserPlaysGame :one
-INSERT INTO plays (id_game, id_user)
-VALUES ($1, $2)
-RETURNING id_game, id_user
+INSERT INTO plays (id_game, id_user, state, rating)
+VALUES ($1, $2, $3, $4)
+RETURNING id_game, id_user, state, rating
 `
 
 type CreateUserPlaysGameParams struct {
-	IDGame int32 `json:"id_game"`
-	IDUser int32 `json:"id_user"`
+	IDGame int32       `json:"id_game"`
+	IDUser int32       `json:"id_user"`
+	State  interface{} `json:"state"`
+	Rating interface{} `json:"rating"`
 }
 
-type CreateUserPlaysGameRow struct {
-	IDGame int32 `json:"id_game"`
-	IDUser int32 `json:"id_user"`
-}
-
-func (q *Queries) CreateUserPlaysGame(ctx context.Context, arg CreateUserPlaysGameParams) (CreateUserPlaysGameRow, error) {
-	row := q.db.QueryRowContext(ctx, createUserPlaysGame, arg.IDGame, arg.IDUser)
-	var i CreateUserPlaysGameRow
-	err := row.Scan(&i.IDGame, &i.IDUser)
+func (q *Queries) CreateUserPlaysGame(ctx context.Context, arg CreateUserPlaysGameParams) (Play, error) {
+	row := q.db.QueryRowContext(ctx, createUserPlaysGame,
+		arg.IDGame,
+		arg.IDUser,
+		arg.State,
+		arg.Rating,
+	)
+	var i Play
+	err := row.Scan(
+		&i.IDGame,
+		&i.IDUser,
+		&i.State,
+		&i.Rating,
+	)
 	return i, err
 }
 
@@ -102,6 +109,16 @@ WHERE id = $1
 
 func (q *Queries) Delete(ctx context.Context, id int32) error {
 	_, err := q.db.ExecContext(ctx, delete, id)
+	return err
+}
+
+const deleteUser = `-- name: DeleteUser :exec
+DELETE FROM users
+WHERE id = $1
+`
+
+func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
+	_, err := q.db.ExecContext(ctx, deleteUser, id)
 	return err
 }
 
@@ -140,21 +157,39 @@ func (q *Queries) GetGame(ctx context.Context, id int32) (Game, error) {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id
+SELECT id, name, password
 FROM users
-WHERE name = $1 AND password = $2
+WHERE id = $1
 `
 
-type GetUserParams struct {
-	Name     string `json:"name"`
-	Password string `json:"password"`
+func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUser, id)
+	var i User
+	err := row.Scan(&i.ID, &i.Name, &i.Password)
+	return i, err
 }
 
-func (q *Queries) GetUser(ctx context.Context, arg GetUserParams) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getUser, arg.Name, arg.Password)
-	var id int32
-	err := row.Scan(&id)
-	return id, err
+const getUserPlaysGame = `-- name: GetUserPlaysGame :one
+SELECT id_game, id_user, state, rating
+FROM plays
+WHERE id_game = $1 AND id_user = $2
+`
+
+type GetUserPlaysGameParams struct {
+	IDGame int32 `json:"id_game"`
+	IDUser int32 `json:"id_user"`
+}
+
+func (q *Queries) GetUserPlaysGame(ctx context.Context, arg GetUserPlaysGameParams) (Play, error) {
+	row := q.db.QueryRowContext(ctx, getUserPlaysGame, arg.IDGame, arg.IDUser)
+	var i Play
+	err := row.Scan(
+		&i.IDGame,
+		&i.IDUser,
+		&i.State,
+		&i.Rating,
+	)
+	return i, err
 }
 
 const listGames = `-- name: ListGames :many
@@ -179,6 +214,69 @@ func (q *Queries) ListGames(ctx context.Context) ([]Game, error) {
 			&i.Image,
 			&i.Link,
 		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listUserPlaysGames = `-- name: ListUserPlaysGames :many
+SELECT id_game, id_user, state, rating
+FROM plays
+ORDER BY id_game, id_user
+`
+
+func (q *Queries) ListUserPlaysGames(ctx context.Context) ([]Play, error) {
+	rows, err := q.db.QueryContext(ctx, listUserPlaysGames)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Play
+	for rows.Next() {
+		var i Play
+		if err := rows.Scan(
+			&i.IDGame,
+			&i.IDUser,
+			&i.State,
+			&i.Rating,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listUsers = `-- name: ListUsers :many
+SELECT id, name, password
+FROM users
+ORDER BY name
+`
+
+func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
+	rows, err := q.db.QueryContext(ctx, listUsers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []User
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(&i.ID, &i.Name, &i.Password); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -248,5 +346,45 @@ type UpdateStateParams struct {
 
 func (q *Queries) UpdateState(ctx context.Context, arg UpdateStateParams) error {
 	_, err := q.db.ExecContext(ctx, updateState, arg.IDGame, arg.IDUser, arg.State)
+	return err
+}
+
+const updateUser = `-- name: UpdateUser :exec
+UPDATE users
+SET name = $2, password = $3
+WHERE id = $1
+`
+
+type UpdateUserParams struct {
+	ID       int32  `json:"id"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
+	_, err := q.db.ExecContext(ctx, updateUser, arg.ID, arg.Name, arg.Password)
+	return err
+}
+
+const updateUserPlaysGame = `-- name: UpdateUserPlaysGame :exec
+UPDATE plays
+SET state = $3, rating = $4
+WHERE id_game = $1 AND id_user = $2
+`
+
+type UpdateUserPlaysGameParams struct {
+	IDGame int32       `json:"id_game"`
+	IDUser int32       `json:"id_user"`
+	State  interface{} `json:"state"`
+	Rating interface{} `json:"rating"`
+}
+
+func (q *Queries) UpdateUserPlaysGame(ctx context.Context, arg UpdateUserPlaysGameParams) error {
+	_, err := q.db.ExecContext(ctx, updateUserPlaysGame,
+		arg.IDGame,
+		arg.IDUser,
+		arg.State,
+		arg.Rating,
+	)
 	return err
 }
