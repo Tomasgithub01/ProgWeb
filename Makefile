@@ -8,7 +8,7 @@ all: build
 # 'make run' ejecuta el air, antes levanta la base de datos. Luego air ejecuta 'make build' cuando ve un cambio.
 run: db
 	@echo ">= Esperando que la base de datos esté lista..."
-	sleep 4
+	sleep 10
 	@echo ">= Iniciando aplicación con Air..."
 	@air
 
@@ -30,7 +30,7 @@ clean:
 
 # Levantar solo la base de datos
 db: 
-	@docker compose up -d db
+	docker compose up db
 
 stop-db: 
 	@docker compose stop db 
