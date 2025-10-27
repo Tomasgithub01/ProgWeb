@@ -21,7 +21,7 @@ var ctx context.Context
 
 func main() {
 	// Conexión a la base de datos
-	connStr := "host=db user=admin password=#Admin20250915 dbname=tpespecialweb sslmode=disable"
+	connStr := "host=db user=admin password=Admin20250915 dbname=tpespecialweb sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatalf("failed to connect to DB: %v", err)

@@ -6,7 +6,7 @@ services:
     container_name: tpespecial_db
     environment:
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: "#Admin20250915"
+      POSTGRES_PASSWORD: 'Admin20250915'
       POSTGRES_DB: tpespecialweb
     ports:
       - "5434:5432"
@@ -14,6 +14,11 @@ services:
       - db_data:/var/lib/postgresql/data
       - ./db/schema:/docker-entrypoint-initdb.d/
     restart: unless-stopped
+    healthcheck: 
+      test: ["CMD", "pg_isready", "-U", "admin", "-d", "tpespecialweb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   app:
     build: .
@@ -23,7 +28,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DB_URL: "postgres://admin:#Admin20250915@db:5432/tpespecialweb?sslmode=disable"
+      DB_URL: "postgres://admin:Admin20250915@db:5432/tpespecialweb?sslmode=disable"
+    volumes:
+      - .:/app
     restart: unless-stopped
 
 volumes:

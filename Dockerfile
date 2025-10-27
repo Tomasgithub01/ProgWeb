@@ -13,6 +13,9 @@ RUN go mod download
 # Copiar todo el proyecto
 COPY . .
 
+# Instalar air
+RUN go install github.com/air-verse/air@latest
+
 # Instalar pq
 RUN go get github.com/lib/pq@latest
 
@@ -30,8 +33,12 @@ COPY --from=builder /app/my-app .
 # Copiar directorio static
 COPY --from=builder /app/static ./static
 
+# Copiar Air desde el builder
+COPY --from=builder /go/bin/air /usr/local/bin/air
+
 # Exponer puerto
 EXPOSE 8080
 
 # Ejecutar app
-CMD ["./my-app"]
+#CMD ["./my-app"]
+CMD ["air", "-c", ".air.toml"]

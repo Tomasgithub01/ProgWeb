@@ -1,7 +1,92 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #ff0000;
-    color: #2600ff;
+/* Contenedor principal */
+.popular-games {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 27px;
+}
+
+/* Encabezado */
+.popular-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.popular-header h2 {
+  width: 287px;
+  height: 46px;
+  text-align: center;
+  color: rgb(2, 2, 2);
+  font-size: 36px;
+  font-family: "Schibsted Grotesk", sans-serif;
+  font-weight: 900;
+  margin: 0;
+}
+
+.header-icon {
+  width: 37.5px;
+  height: 37.5px;
+  background: var(--Schemes-Background, #FEF7FF);
+}
+
+/* Contenedor de juegos */
+.game-list {
+  align-self: stretch;
+  height: 320px;
+  padding: 0 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 111px;
+  flex-wrap: wrap; /* Opcional, mejora en pantallas pequeñas */
+}
+
+/* Tarjeta de juego */
+.game-card {
+  width: 231px;
+  height: 320px;
+  background: rgba(217, 217, 217, 0.09);
+  border-radius: 21px;
+  outline: 1px solid rgba(255, 255, 255, 0.13);
+  outline-offset: -1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: hidden;
+}
+
+.game-image {
+  width: 100%;
+  height: 229px;
+  position: relative;
+  border-top-left-radius: 21px;
+  border-top-right-radius: 21px;
+  background: #d9d9d9;
+  overflow: hidden;
+}
+
+.game-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Título del juego */
+.game-title {
+  height: 60px;
+  text-align: center;
+  color: rgb(2, 2, 2);
+  font-size: 24px;
+  font-family: "Schibsted Grotesk", sans-serif;
+  font-weight: 900;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
 }
