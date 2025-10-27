@@ -1,3 +1,22 @@
+body {
+    margin: 0;
+}
+
+.dashboard {
+    background: linear-gradient(
+    180deg,
+    rgba(21, 29, 87, 1) 0%,
+    rgba(11, 14, 43, 1) 100%
+    );
+    width: 100%;
+    min-width: auto;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+
 /* Contenedor principal */
 .popular-games {
   width: 100%;
@@ -21,7 +40,7 @@
   width: 287px;
   height: 46px;
   text-align: center;
-  color: rgb(2, 2, 2);
+  color: #FFFFFF;
   font-size: 36px;
   font-family: "Schibsted Grotesk", sans-serif;
   font-weight: 900;
@@ -56,9 +75,10 @@
   outline-offset: -1px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   overflow: hidden;
+  gap: 5px;
 }
 
 .game-image {
@@ -81,7 +101,7 @@
 .game-title {
   height: 60px;
   text-align: center;
-  color: rgb(2, 2, 2);
+  color: #FFFFFF;
   font-size: 24px;
   font-family: "Schibsted Grotesk", sans-serif;
   font-weight: 900;

@@ -70,7 +70,7 @@ PUT http://localhost:8080/games/3
 Content-Type: application/json
 {
   "name": "Hollow Knight",
-  "image": {"String":"https://example.com/hollowknightsilksong.jpg","Valid":true},
+  "image": {"String":"https://i.blogs.es/0427e3/hollow-knight--0-/375_375.jpeg","Valid":true},
   "link": {"String":"https://www.hollowknight.com","Valid":true}
 }
 HTTP 200

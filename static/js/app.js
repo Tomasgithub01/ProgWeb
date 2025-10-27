@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const container = document.getElementById("gameList");
+  const gameList = document.getElementById("gameList");
 
   try {
     //  Hacemos la petición a nuestro backend
@@ -12,29 +12,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     //  Interpretamos la respuesta como JSON
     //const html = await response.text();
-    const data = await response.json();
-    console.log(data);
+    const games = await response.json();
+    console.log(games);
     
 
-    container.innerHTML = ""; // clear previous content
+    gameList.innerHTML = ""; // clear previous content
 
-    if (data.length === 0) {
+    if (games.length === 0) {
       // If there are no elements, show a message
       const p = document.createElement("p");
       p.textContent = "There are no elements to display.";
-      container.appendChild(p);
+      gameList.appendChild(p);
     } else {
-      // If there are elements, render the list
-      const list = document.createElement("ul");
-      data.forEach((item) => {
-        const li = document.createElement("li");
-        li.textContent = `${item.id} - ${item.name}`;
-        list.appendChild(li);
-      });
-      container.appendChild(list);
+      gameList.innerHTML = games.map(game => `
+        <div class="game-card">
+          <div class="game-image">
+            <img src="https://i.blogs.es/0427e3/hollow-knight--0-/375_375.jpeg" alt="${game.name}">
+          </div>
+          <div class="game-title">${game.name}</div>
+        </div>
+      `).join('');
     }
+  
   } catch (error) {
     console.error(error);
-    container.textContent = "Error al cargar las entidades.";
+    gameList.textContent = "Error al cargar las entidades.";
   }
 });
