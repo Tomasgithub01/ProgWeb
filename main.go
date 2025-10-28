@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -45,6 +46,8 @@ func main() {
 	http.HandleFunc("/users/", userHandler)
 	http.HandleFunc("/plays", playsHandler)
 	http.HandleFunc("/plays/", playHandler)
+	http.HandleFunc("/steam/search", SearchSteamGames)
+	http.HandleFunc("/steam/search/", SearchSteamGames)
 
 	port := ":8080"
 	fmt.Printf("Servidor escuchando en http://localhost%s\n", port)
@@ -382,4 +385,33 @@ func deletePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
+}
+
+// para buscar
+func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
+    log.Printf("Steam handler: path=%s method=%s query=%s\n", r.URL.Path, r.Method, r.URL.RawQuery)
+	query := r.URL.Query().Get("query")
+	if query == "" {
+		http.Error(w, "Missing query", http.StatusBadRequest)
+		return
+	}
+
+	// Llamar a la API de Steam
+	steamURL := fmt.Sprintf("https://store.steampowered.com/api/storesearch/?term=%s&cc=us", url.QueryEscape(query))
+    log.Printf("Consultando Steam: %s\n", steamURL)
+	resp, err := http.Get(steamURL)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
+
+	var data map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+    
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(w).Encode(data["items"])
 }

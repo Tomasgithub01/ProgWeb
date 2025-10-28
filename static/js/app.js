@@ -39,3 +39,53 @@ document.addEventListener("DOMContentLoaded", async () => {
     gameList.textContent = "Error al cargar las entidades.";
   }
 });
+
+
+const searchInput = document.getElementById("search");
+const resultsDiv = document.getElementById("results");
+
+let timeout;
+
+searchInput.addEventListener("input", () => {
+  clearTimeout(timeout);
+  const query = searchInput.value.trim();
+  if (!query) {
+    resultsDiv.style.display = "none";
+    return;
+  }
+
+  // Espera 300ms antes de buscar (para no saturar el servidor)
+  timeout = setTimeout(async () => {
+    const res = await fetch(`/steam/search?query=${encodeURIComponent(query)}`);
+    const games = await res.json();
+
+    resultsDiv.innerHTML = "";
+    games.forEach(game => {
+      const div = document.createElement("div");
+      div.classList.add("result-item");
+      div.innerHTML = `
+        <img src="${game.tiny_image}" alt="${game.name}">
+        <span>${game.name}</span>
+      `;
+      div.addEventListener("click", () => selectGame(game));
+      resultsDiv.appendChild(div);
+    });
+    resultsDiv.style.display = "block";
+  }, 300);
+});
+
+function selectGame(game) {
+  resultsDiv.style.display = "none";
+  searchInput.value = game.name;
+
+  // Enviar el juego seleccionado a tu backend para guardarlo
+  fetch("/games", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      steam_id: game.id,
+      name: game.name,
+      image: game.tiny_image
+    })
+  });
+}
