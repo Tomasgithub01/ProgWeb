@@ -1,11 +1,27 @@
 root = "."
 tmp_dir = "tmp"
 [build]
-    cmd = "make build"
-    bin = "my-app"
-    full_bin = "APP_ENV=dev APP_USER=air ./my-app"
-    include_ext = ["go", "templ", "sql"]
-    exclude_dir = ["tmp", "vendor", "db/sqlc"]
+    cmd = "go build -buildvcs=false -o ./tmp/my-app ."
+    bin = "tmp/my-app"
+    #bin = "my-app"
+    full_bin = "tmp/my-app"
+    #full_bin = "APP_ENV=dev APP_USER=air ./my-app"
+    include_ext = ["go", "tpl", "tmpl", "html", "templ"]
+    exclude_dir = ["tmp", "vendor", "node_modules", "db/sqlc"]
     exclude_regex = ["db/sqlc/.*"]
+    delay = 1000 # milisegundos antes de recompilar
 [run]
-    skip_init = true
+    skip_init = false
+[log]
+    # Mostrar logs en consola
+    time = true
+    color = true
+
+[misc]
+    # Air ignora los archivos sin extensión (como Dockerfile)
+    clean_on_exit = true
+
+[env]
+    # Variables de entorno dentro del contenedor
+    DB_URL = "postgres://admin:Admin20250915@db:5432/tpespecialweb?sslmode=disable"
+    PORT = "8080"

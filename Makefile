@@ -10,8 +10,8 @@ run: setup
 	air
 
 generate:
-	echo ">= Generating SQLC code..."
-	sqlc generate 
+#	echo ">= Generating SQLC code..."
+#	sqlc generate 
 #	@echo ">= Generating Templ code..."
 #	@templ generate
 

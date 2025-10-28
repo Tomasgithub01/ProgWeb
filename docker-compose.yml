@@ -11,7 +11,7 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - pgdata_prod:/var/lib/postgresql/data
       - ./db/schema:/docker-entrypoint-initdb.d/
     restart: unless-stopped
     healthcheck: 
@@ -21,17 +21,19 @@ services:
       retries: 5
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: tpespecial_app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8080:8080"
     environment:
-      DB_URL: "postgres://admin:Admin20250915@db:5432/tpespecialweb?sslmode=disable"
-    volumes:
-      - .:/app
+      - DB_URL=postgres://admin:Admin20250915@db:5432/tpespecialweb?sslmode=disable
     restart: unless-stopped
 
+
 volumes:
-  db_data:
+  pgdata_prod:
