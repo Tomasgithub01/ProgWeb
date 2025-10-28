@@ -22,12 +22,12 @@ func ValidateGame(g db.Game) error {
 		return errors.New("description cannot be longer than 200 characters")
 	}
 
-	if g.Image.Valid && len(g.Image.String) > 100 {
-		return errors.New("image URL cannot be longer than 100 characters")
+	if len(g.Image) > 200 {
+		return errors.New("image URL cannot be longer than 200 characters")
 	}
 
-	if g.Link.Valid && len(g.Link.String) > 100 {
-		return errors.New("link cannot be longer than 100 characters")
+	if len(g.Link) > 200 {
+		return errors.New("link cannot be longer than 200 characters")
 	}
 	return nil
 }

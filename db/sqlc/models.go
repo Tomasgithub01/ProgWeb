@@ -4,16 +4,12 @@
 
 package db
 
-import (
-	"database/sql"
-)
-
 type Game struct {
-	ID          int32          `json:"id"`
-	Name        string         `json:"name"`
-	Description string         `json:"description"`
-	Image       sql.NullString `json:"image"`
-	Link        sql.NullString `json:"link"`
+	ID          int32  `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Image       string `json:"image"`
+	Link        string `json:"link"`
 }
 
 type Play struct {

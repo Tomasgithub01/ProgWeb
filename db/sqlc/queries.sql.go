@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const averageGameRating = `-- name: AverageGameRating :one
@@ -30,10 +29,10 @@ RETURNING id, name, description, image, link
 `
 
 type CreateGameParams struct {
-	Name        string         `json:"name"`
-	Description string         `json:"description"`
-	Image       sql.NullString `json:"image"`
-	Link        sql.NullString `json:"link"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Image       string `json:"image"`
+	Link        string `json:"link"`
 }
 
 func (q *Queries) CreateGame(ctx context.Context, arg CreateGameParams) (Game, error) {
@@ -297,11 +296,11 @@ WHERE id = $1
 `
 
 type UpdateGameParams struct {
-	ID          int32          `json:"id"`
-	Name        string         `json:"name"`
-	Description string         `json:"description"`
-	Image       sql.NullString `json:"image"`
-	Link        sql.NullString `json:"link"`
+	ID          int32  `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Image       string `json:"image"`
+	Link        string `json:"link"`
 }
 
 func (q *Queries) UpdateGame(ctx context.Context, arg UpdateGameParams) error {

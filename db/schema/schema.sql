@@ -9,10 +9,10 @@ CHECK (VALUE > 0 AND VALUE <= 5);
 
 CREATE TABLE game (
     id serial not null,
-    name varchar(30) not null,
+    name varchar(200) not null,
     description varchar(200) not null,
-    image varchar(100),
-    link varchar(100),
+    image varchar(200) not null,
+    link varchar(200) not null,
     CONSTRAINT pk_game PRIMARY KEY (id)
 );
 

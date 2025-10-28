@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       gameList.innerHTML = games.map(game => `
         <div class="game-card">
           <div class="game-image">
-            <img src="https://i.blogs.es/0427e3/hollow-knight--0-/375_375.jpeg" alt="${game.name}">
+            <img src="${game.image}" alt="${game.name}">
           </div>
           <div class="game-title">${game.name}</div>
         </div>
@@ -78,14 +78,18 @@ function selectGame(game) {
   resultsDiv.style.display = "none";
   searchInput.value = game.name;
 
-  // Enviar el juego seleccionado a tu backend para guardarlo
   fetch("/games", {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      steam_id: game.id,
-      name: game.name,
-      image: game.tiny_image
+      name: game.name || "",              // nunca null
+      description: "Imported from Steam",
+      image: game.tiny_image || "",       // usa string vacío si no hay imagen
+      link: `https://store.steampowered.com/app/${game.id}` || "" // también asegurado
     })
+  }).then(res => {
+    if (!res.ok) {
+      res.text().then(t => console.error("Error inserting game:", t));
+    }
   });
 }

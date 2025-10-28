@@ -78,6 +78,8 @@ body {
   justify-content: flex-start;
   align-items: center;
   overflow: hidden;
+  margin-left: 4vw;
+  margin-right: 4vw;
   gap: 5px;
 }
 
