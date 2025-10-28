@@ -15,8 +15,8 @@ Content-Type: application/json
 {
   "name": "Minecraft",
   "description": "Juego de construcción con bloques y supervivencia.",
-  "image": {"String":"https://example.com/minecraft.jpg","Valid":true},
-  "link": {"String":"https://www.minecraft.net","Valid":true}
+  "image": "https://example.com/minecraft.jpg",
+  "link": "https://www.minecraft.net"
 }
 
 HTTP/1.1 201
@@ -30,8 +30,8 @@ Content-Type: application/json
 {
   "name": "Stardew Valley",
   "description": "Simulación de granja con exploración y aventuras.",
-  "image": {"String":"https://example.com/stardew.jpg","Valid":true},
-  "link": {"String":"https://www.stardewvalley.net","Valid":true}
+  "image": "https://example.com/stardew.jpg",
+  "link": "https://www.stardewvalley.net"
 }
 
 HTTP/1.1 201
@@ -44,8 +44,8 @@ Content-Type: application/json
 {
   "name": "Hollow Knight",
   "description": "Metroidvania con exploración y combates desafiantes.",
-  "image": {"String":"https://example.com/hollowknight.jpg","Valid":true},
-  "link": {"String":"https://www.hollowknight.com","Valid":true}
+  "image": "https://example.com/hollowknight.jpg",
+  "link": "https://www.hollowknight.com"
 }
 
 HTTP/1.1 201
@@ -70,7 +70,7 @@ PUT http://localhost:8080/games/3
 Content-Type: application/json
 {
   "name": "Hollow Knight",
-  "image": {"String":"https://i.blogs.es/0427e3/hollow-knight--0-/375_375.jpeg","Valid":true},
-  "link": {"String":"https://www.hollowknight.com","Valid":true}
+  "image": "https://i.blogs.es/0427e3/hollow-knight--0-/375_375.jpeg",
+  "link": "https://www.hollowknight.com"
 }
 HTTP 200

@@ -2,19 +2,26 @@ body {
     margin: 0;
 }
 
-.dashboard {
+html, body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(180deg, rgba(21, 29, 87, 1) 0%, rgba(11, 14, 43, 1) 100%);
+  background-attachment: fixed;
+}
+
+/* .dashboard {
     background: linear-gradient(
     180deg,
     rgba(21, 29, 87, 1) 0%,
     rgba(11, 14, 43, 1) 100%
     );
     width: 100%;
-    min-width: auto;
-    min-height: auto;
+     min-width: auto
+     min-height: auto; 
     display: flex;
     flex-direction: column;
     padding: 10px;
-}
+} */
 
 
 /* Contenedor principal */

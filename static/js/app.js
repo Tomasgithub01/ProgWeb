@@ -84,7 +84,8 @@ function selectGame(game) {
     body: JSON.stringify({
       name: game.name || "",              // nunca null
       description: "Imported from Steam",
-      image: game.tiny_image || "",       // usa string vacío si no hay imagen
+      //image: game.tiny_image || "",       // usa string vacío si no hay imagen
+      image: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.id}/hero_capsule.jpg` || "",
       link: `https://store.steampowered.com/app/${game.id}` || "" // también asegurado
     })
   }).then(res => {
