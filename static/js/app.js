@@ -1,42 +1,49 @@
+/*
+WEBLOAD Initial data
+Sends request to backend to load existing games and display them
+*/
 document.addEventListener("DOMContentLoaded", async () => {
   const gameList = document.getElementById("gameList");
 
   try {
-    //  Hacemos la petición a nuestro backend
+  // Api call to our backend
     const response = await fetch("http://localhost:8080/games");
 
-    //  Verificamos que la respuesta sea exitosa
+    
     if (!response.ok) {
-      throw new Error("Error en la respuesta del servidor");
+      throw new Error("Server response error");
     }
 
-    //  Interpretamos la respuesta como JSON
-    //const html = await response.text();
+    
     const games = await response.json();
     console.log(games);
     
 
-    gameList.innerHTML = ""; // clear previous content
+    gameList.innerHTML = ""; 
+
+    /*
+    Adds delete button to each card,  onclick calls delete game function with the game id and the card element as parameters to remove it
+    */
 
     if (games.length === 0) {
-      // If there are no elements, show a message
       const p = document.createElement("p");
       p.textContent = "There are no elements to display.";
       gameList.appendChild(p);
     } else {
       gameList.innerHTML = games.map(game => `
-        <div class="game-card">
+        <div class="game-card" data-id="${game.id}">
           <div class="game-image">
             <img src="${game.image}" alt="${game.name}">
           </div>
           <div class="game-title">${game.name}</div>
+          <button class="card-menu-btn" onclick="deleteGame(${game.id}, this.closest('.game-card'))">⋯</button> 
         </div>
       `).join('');
     }
   
   } catch (error) {
     console.error(error);
-    gameList.textContent = "Error al cargar las entidades.";
+    gameList.textContent = "Error loading games.";
   }
 });
 
@@ -46,6 +53,11 @@ const resultsDiv = document.getElementById("results");
 
 let timeout;
 
+/*
+SEARCH GAME JS FUNCTION
+Sends search request to STEAM api endpoint and displays results
+Adds an event listener to the search input field that triggers on input.
+*/
 searchInput.addEventListener("input", () => {
   clearTimeout(timeout);
   const query = searchInput.value.trim();
@@ -54,7 +66,10 @@ searchInput.addEventListener("input", () => {
     return;
   }
 
-  // Espera 300ms antes de buscar (para no saturar el servidor)
+  /*
+  Shows results in form of card divs
+  Add event listener to call select game function on click so to insert it
+  */
   timeout = setTimeout(async () => {
     const res = await fetch(`/steam/search?query=${encodeURIComponent(query)}`);
     const games = await res.json();
@@ -74,6 +89,11 @@ searchInput.addEventListener("input", () => {
   }, 300);
 });
 
+/*
+INSERT GAME JS FUNCTION
+Sends post request to api endpoint to insert a new game
+We use steam api data to fill in the fields previuously searched
+*/
 function selectGame(game) {
   resultsDiv.style.display = "none";
   searchInput.value = game.name;
@@ -82,15 +102,37 @@ function selectGame(game) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      name: game.name || "",              // nunca null
+      name: game.name || "",              
       description: "Imported from Steam",
-      //image: game.tiny_image || "",       // usa string vacío si no hay imagen
       image: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.id}/hero_capsule.jpg` || "",
-      link: `https://store.steampowered.com/app/${game.id}` || "" // también asegurado
+      link: `https://store.steampowered.com/app/${game.id}` || "" 
     })
   }).then(res => {
     if (!res.ok) {
       res.text().then(t => console.error("Error inserting game:", t));
+    } else {
+      location.reload(); 
     }
   });
+}
+/*
+DELETE GAME JS FUNCTION
+Sends delete request to api endpoint and removes card from DOM on success
+(could also be done by reloading the DOM instead of deleting part of it)
+*/
+async function deleteGame(id, cardEl) {
+  if (!confirm('¿Delete this game?')) return;
+  try {
+    const res = await fetch(`/games/${id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('Error deleting game:', text); 
+      alert('Error deleting game'); 
+      return;
+    }
+    if (cardEl && cardEl.remove) cardEl.remove();
+  } catch (err) {
+    console.error('Error deleting game:', err);
+    alert('Error deleting game');
+  }
 }
