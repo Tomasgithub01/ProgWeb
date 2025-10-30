@@ -9,6 +9,13 @@ html, body {
   background-attachment: fixed;
 }
 
+p {
+  color: #FFFFFF;
+}
+
+.main-title {
+  color: #FFFFFF;
+}
 
 .popular-games {
   width: 100%;
