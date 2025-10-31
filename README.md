@@ -36,6 +36,12 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
 
 3. **Ejecutar el proyecto con Docker Compose**
 
+    Si se quiere ejecutar con un solo comando utilizar:
+
+    ```bash
+      make testdev
+      ```   
+
     Este ejemplo contiene los comandos para ejecutar en modo de desarrollo (incluye air)
     - Construir e iniciar los contenedores :
 
