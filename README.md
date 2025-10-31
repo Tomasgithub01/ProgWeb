@@ -43,7 +43,7 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
       make dev
       ```
 
-    - Correr testeos con hurl
+    - En una nueva terminal correr testeos con hurl
       ```bash
       make test
       ```
