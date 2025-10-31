@@ -37,6 +37,7 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
 3. **Ejecutar el proyecto con Docker Compose**
 
     Si se quiere ejecutar con un solo comando utilizar:
+   IMPORTANTE: Este comando posee un sleep arbitrario entre levantar el docker y realizar el testeo con hurl.
 
     ```bash
       make testdev
