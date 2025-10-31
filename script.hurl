@@ -15,7 +15,7 @@ Content-Type: application/json
 {
   "name": "Minecraft",
   "description": "Juego de construcción con bloques y supervivencia.",
-  "image": "https://example.com/minecraft.jpg",
+  "image": "https://image.api.playstation.com/vulcan/ap/rnd/202407/0401/670c294ded3baf4fa11068db2ec6758c63f7daeb266a35a1.png",
   "link": "https://www.minecraft.net"
 }
 
@@ -30,7 +30,7 @@ Content-Type: application/json
 {
   "name": "Stardew Valley",
   "description": "Simulación de granja con exploración y aventuras.",
-  "image": "https://example.com/stardew.jpg",
+  "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/413150/hero_capsule.jpg",
   "link": "https://www.stardewvalley.net"
 }
 
