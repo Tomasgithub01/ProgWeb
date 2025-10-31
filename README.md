@@ -36,12 +36,17 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
 
 3. **Ejecutar el proyecto con Docker Compose**
 
-    - Construir e iniciar los contenedores:
+    Este ejemplo contiene los comandos para ejecutar en modo de desarrollo (incluye air)
+    - Construir e iniciar los contenedores :
 
       ```bash
-      sudo docker compose up --build
+      make dev
       ```
-        [Pasos para evitar anteponer sudo](https://docs.docker.com/engine/install/linux-postinstall/)
+
+    - Correr testeos con hurl
+      ```bash
+      make test
+      ```
 
     - Abrir el navegador en:  
       ```
@@ -53,7 +58,7 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
       Ctrl + C en la terminal que está corriendo y luego:
       
       ```bash
-      sudo docker compose down
+      make down
       ```
 
 ---
