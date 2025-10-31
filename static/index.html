@@ -4,48 +4,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GameShelf</title>
     <link rel="stylesheet" href="/static/css/index.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
     <div class="dashboard">
-        <h1 class="main-title">GameShelf</h1>
-        <p>En esta pagina podras armar listas con los juegos que comenzaste, terminaste, tus favoritos, etc. Una forma organizativa y visual de ver tu historia con los juegos.</p>
-        
-        <input type="text" id="search" placeholder="Buscar en Steam..." autocomplete="off">
-        <div id="results"></div>
-
+        <header>
+            <img src="images/logo.svg" alt="Logo" id="Logo">
+            <div>
+                <input type="text" id="search" placeholder="⌕ Search on Steam..." autocomplete="off">
+                <div id="results"></div>
+            </div>
+            <img src="images/user_icon.svg" alt="User Icon" id="User-Icon">
+            <p id="username-display">User</p>
+        </header>
         <div class="popular-games">
             <div class="popular-header">
                 <h2>Popular Games</h2>
                 <div class="header-icon">
-                    <i class="fas fa-clock fa-xl"></i>
+                    <i class="bi bi-alarm"></i>
                 </div>
             </div>
 
             <div class="game-list">
                 <div class="game-card">
                     <div class="game-image">
-                        <img src="https://placehold.co/237x357" alt="Hollow Knight: Silksong">
-                    </div>
-                    <div class="game-name-btn">
-                        <div class="game-title">Hollow Knight: Silksong</div>
-                        <div class="dropend">
-                            <button type="button" class="btn btn-outline-primary" style="--bs-btn-border-color: none;" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Delete</a></li>    
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="game-card">
-                    <div class="game-image">
-                        <img src="https://placehold.co/237x357" alt="Hollow Knight: Silksong">
+                        <img src="images/hollow_knight_hero.png" alt="Hollow Knight: Silksong">
                     </div>
                     <div class="game-title">Hollow Knight: Silksong</div>
+                </div>
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="images/silent_hill_f_hero.png" alt="Silent Hill: f">
+                    </div>
+                    <div class="game-title">Silent Hill: f</div>
+                </div>
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="images/red_dead_redemption_2_hero.png" alt="Red Dead Redemption 2">
+                    </div>
+                    <div class="game-title">Red Dead Redemption 2</div>
                 </div>
 
             </div>
@@ -54,7 +53,7 @@
         <div class="popular-games">
             <div class="popular-header">
                 <h2>My games</h2>
-                <div class="header-icon"></div>
+                <div class="header-icon"><i class="bi bi-bookmark"></i></div>
             </div>
             <div id="gameList" class="game-list">
                 

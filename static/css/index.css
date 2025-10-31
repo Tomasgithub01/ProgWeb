@@ -32,24 +32,23 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px;
 }
 
 .popular-header h2 {
-  width: 287px;
-  height: 46px;
-  text-align: center;
+  text-align: left;
   color: #FFFFFF;
   font-size: 36px;
   font-family: "Schibsted Grotesk", sans-serif;
   font-weight: 900;
   margin: 0;
+  margin-left: 1vw;
 }
 
 .header-icon {
-  width: 37.5px;
-  height: 37.5px;
-  background: var(--Schemes-Background, #FEF7FF);
+  font-size: 2rem;
+  color: #FFFFFF;
+  margin: 0;
+  margin-left: 1vw;
 }
 
 
@@ -123,14 +122,46 @@ p {
   border-color: none;
 }
 
-#results {
-  border: 1px solid #ccc;
-  background: white;
-  position: absolute;
-  width: 300px;
-  max-height: 300px;
-  overflow-y: auto;
-  display: none;
+
+
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#search {
+  width: 40vw;
+  height: 5vh;
+  border-radius: 40px;
+  background-color: #434977;
+  color: #8387a3;
+  font-family: "Schibsted Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  padding: 10px 20px;
+  margin: 0;
+}
+
+#Logo {
+  margin-right: 4vw;
+}
+
+#User-Icon {
+  width: 7vw;
+  height: 7vh;
+  margin: 0;
+  margin-left: 4vw;
+}
+#username-display {
+  color: #FFFFFF;
+  font-family: "Schibsted Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  margin: 0;
 }
 
 .result-item {
@@ -138,13 +169,33 @@ p {
   align-items: center;
   padding: 5px;
   cursor: pointer;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  margin-left: 1vw;
+  margin-right: 1vw;
+  background: #626cb3;
+}
+
+#results {
+  border: none;
+  box-shadow: #000000 0px 0px 10px;
+  border-radius: 20px;
+  background: #434977;
+  position: absolute;
+  width: 40vw;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+  z-index: 9999; 
+  font-family: "Schibsted Grotesk", sans-serif;
+  color: #FFFFFF;
 }
 
 .result-item img {
-  width: 40px;
-  height: 20px;
-  margin-right: 10px;
+  width: 4vw;
+  height: 3vh;
+  margin-right: 2vw;
 }
 .result-item:hover {
-  background-color: #eee;
+  background-color: #767a9e;
 }
