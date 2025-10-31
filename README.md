@@ -70,6 +70,37 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
 
 ---
 
+# 🎮 Funcionamiento General
+
+- La app utiliza la **[API de Steam](https://steamcommunity.com/dev)** para buscar los juegos.  
+  Desde allí hacemos una petición que nos devuelve un JSON del estilo:
+
+  ```json
+  {
+    "id": 367520,
+    "type": "game",
+    "name": "Hollow Knight",
+    "tiny_image": "https://cdn.akamai.steamstatic.com/steam/apps/367520/capsule_sm_120.jpg",
+    "header_image": "https://cdn.akamai.steamstatic.com/steam/apps/367520/header.jpg",
+    "hero_image": "https://cdn.akamai.steamstatic.com/steam/apps/367520/library_hero.jpg",
+    "url": "https://store.steampowered.com/app/367520/Hollow_Knight/",
+    "price": "14.99 USD"
+  }
+Las respuestas JSON se transforman al formato que entiende nuestro backend y se insertan en la base de datos a través del endpoint:
+
+
+POST /game
+
+
+Esto permite no tener que guardar todas las imágenes de los juegos en nuestro servidor de archivos, en detrimento de tener que buscarlas directamente desde Steam.
+Por ejemplo, para las imágenes se utiliza la siguiente URL base:
+
+
+https://cdn.cloudflare.steamstatic.com/steam/apps/${game.id}/hero_capsule.jpg
+Completando el placeholder ${game.id} con el ID del juego obtenido desde la query inicial.
+
+En el buscador de la parte principal, se puede buscar un juego y, al hacer clic, se envía al servidor Go, y en consecuencia, a la base de datos.
+
 ## Estructura del Proyecto
 
 ```text
