@@ -74,3 +74,6 @@ Content-Type: application/json
   "link": "https://www.hollowknight.com"
 }
 HTTP 200
+
+#DELETE http://localhost:8080/games/3
+#HTTP 204

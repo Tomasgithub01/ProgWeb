@@ -5,6 +5,18 @@ templ GameList(games []db.Game, sortColumn string, sortOrder string){
 }
 
 templ GameLayout(games []db.Game, sortColumn, sortOrder string){
-    <div> 
+    <div id="gameList" class="game-list">
+        if len(games) > 0 {
+            for _, game := range games {
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="{game.Image}" alt="{game.Name}">
+                    </div>
+                    <div class="game-title">{game.Name}</div>
+                </div>
+            }
+        } else {
+            <p>No products found.</p>
+        }       
     </div>
 }

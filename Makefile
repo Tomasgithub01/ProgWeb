@@ -12,5 +12,5 @@ down:
 
 testdev:
 	docker compose -f docker-compose.dev.yml up -d --build
-	docker compose -f docker-compose.dev.yml wait db
+	@sleep 30
 	hurl --test script.hurl
