@@ -1,7 +1,11 @@
+package views
+
+import db "ProgWeb/db/sqlc"
+
 templ GameList(games []db.Game, sortColumn string, sortOrder string){
-    <!DOCTYPE html>
+    <html>
         
-    <html> 
+    </html> 
 }
 
 templ GameLayout(games []db.Game, sortColumn, sortOrder string){
@@ -12,11 +16,28 @@ templ GameLayout(games []db.Game, sortColumn, sortOrder string){
                     <div class="game-image">
                         <img src="{game.Image}" alt="{game.Name}">
                     </div>
-                    <div class="game-title">{game.Name}</div>
+                    <div class="game-name-btn">
+                        <div class="game-title">{game.Name}</div>
+                        <div class="dropend">
+                            <button type="button" class="btn btn-outline-primary" style="--bs-btn-border-color: none;" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" onclick="deleteGame(${game.id}, this.closest('.game-card'))">Delete</a></li>    
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             }
         } else {
             <p>No products found.</p>
         }       
+    </div>
+}
+
+templ GameSearch(){
+    <div>
+        <input type="text" id="search" placeholder="⌕ Search on Steam..." autocomplete="off">
+        <div id="results"></div>
     </div>
 }

@@ -1,7 +1,9 @@
 package main
 
 import (
+	sqlc "ProgWeb/db/sqlc"
 	"ProgWeb/logic"
+	"ProgWeb/views"
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -12,8 +14,7 @@ import (
 	"strconv"
 	"strings"
 
-	sqlc "ProgWeb/db/sqlc"
-
+	"github.com/a-h/templ"
 	_ "github.com/lib/pq"
 )
 
@@ -34,6 +35,9 @@ func main() {
 
 	// Handler para la página principal
 	http.HandleFunc("/", handleMain)
+
+	// Handler del dashboard
+	http.HandleFunc("/dashboard", handleDashboard)
 
 	// Servir archivos estáticos (CSS, JS, imágenes)
 	fs := http.FileServer(http.Dir("static"))
@@ -66,7 +70,13 @@ func handleMain(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	http.ServeFile(w, r, "static/login.html")
+	//http.ServeFile(w, r, "static/login.html")
+	templ.Handler(views.LayoutLogin()).ServeHTTP(w, r)
+}
+
+func handleDashboard(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	templ.Handler(views.LayoutIndex()).ServeHTTP(w, r)
 }
 
 // Handler /games
@@ -389,7 +399,7 @@ func deletePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 
 // para buscar
 func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
-    log.Printf("Steam handler: path=%s method=%s query=%s\n", r.URL.Path, r.Method, r.URL.RawQuery)
+	log.Printf("Steam handler: path=%s method=%s query=%s\n", r.URL.Path, r.Method, r.URL.RawQuery)
 	query := r.URL.Query().Get("query")
 	if query == "" {
 		http.Error(w, "Missing query", http.StatusBadRequest)
@@ -398,7 +408,7 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 
 	// Llamar a la API de Steam
 	steamURL := fmt.Sprintf("https://store.steampowered.com/api/storesearch/?term=%s&cc=us", url.QueryEscape(query))
-    log.Printf("Consultando Steam: %s\n", steamURL)
+	log.Printf("Consultando Steam: %s\n", steamURL)
 	resp, err := http.Get(steamURL)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -411,7 +421,7 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-    
+
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(data["items"])
 }

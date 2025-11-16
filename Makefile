@@ -14,3 +14,6 @@ testdev:
 	docker compose -f docker-compose.dev.yml up -d --build
 	@sleep 30
 	hurl --test script.hurl
+
+generate: 
+	go run github.com/a-h/templ/cmd/templ@latest generate

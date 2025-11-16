@@ -38,12 +38,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="game-name-btn">
             <div class="game-title">${game.name}</div>
             <div class="dropend">
-                <button type="button" class="btn btn-outline-primary" style="--bs-btn-border-color: none;" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" onclick="deleteGame(${game.id}, this.closest('.game-card'))">Delete</a></li>    
-                </ul>
+              <button type="button" class="btn btn-outline-primary" style="--bs-btn-border-color: none;" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v"></i>
+              </button>
+              <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" onclick="deleteGame(${game.id}, this.closest('.game-card'))">Delete</a></li>    
+              </ul>
             </div>
           </div>
         </div>
