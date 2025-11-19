@@ -1,32 +1,71 @@
 package views
+import db "ProgWeb/db/sqlc"
 
-templ LayoutIndex(){
+templ LayoutIndex(games []db.Game, searchedGames []db.Game){
     <!DOCTYPE html>
     <html>
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title></title>
+            <link rel="stylesheet" href="/static/css/index.css">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"/>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         </head>
         <body>
             <div class="dashboard">
                 <header>
-                    <img src="images/logo.svg" alt="Logo" id="Logo">
-                    @GameSearch
-                    <img src="images/user_icon.svg" alt="User Icon" id="User-Icon">
+                    <img src="/static/images/logo.svg" alt="Logo" id="Logo">
+                    @GameSearch(searchedGames)
+                    <img src="/static/images/user_icon.svg" alt="User Icon" id="User-Icon">
                     <p id="username-display">User</p>
                 </header>
-            </div>
+                <div class="popular-games">
+                    <div class="popular-header">
+                        <h2>Popular Games</h2>
+                        <div class="header-icon">
+                            <i class="bi bi-alarm"></i>
+                        </div>
+                    </div>
+
+                    <div class="game-list">
+                        <div class="game-card">
+                            <div class="game-image">
+                                <img src="/static/images/hollow_knight_hero.png" alt="Hollow Knight: Silksong">
+                            </div>
+                            <div class="game-title">Hollow Knight: Silksong</div>
+                        </div>
+                        <div class="game-card">
+                            <div class="game-image">
+                                <img src="/static/images/silent_hill_f_hero.png" alt="Silent Hill: f">
+                            </div>
+                            <div class="game-title">Silent Hill: f</div>
+                        </div>
+                        <div class="game-card">
+                            <div class="game-image">
+                                <img src="/static/images/red_dead_redemption_2_hero.png" alt="Red Dead Redemption 2">
+                            </div>
+                            <div class="game-title">Red Dead Redemption 2</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="popular-games">
+                    <div class="popular-header">
+                        <h2>My games</h2>
+                        <div class="header-icon"><i class="bi bi-bookmark"></i></div>
+                    </div>
+                    @GameLayout(games)
+                </div>
+    </div>
         </body>
     </html>
 }
 
-templ indexLayout() {
-    <link rel="stylesheet" href="/static/css/index.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-}
+
 
 templ LayoutLogin(){
     <!DOCTYPE html>

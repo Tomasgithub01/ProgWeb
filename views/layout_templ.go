@@ -8,7 +8,9 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func LayoutIndex() templ.Component {
+import db "ProgWeb/db/sqlc"
+
+func LayoutIndex(games []db.Game, searchedGames []db.Game) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,36 +31,23 @@ func LayoutIndex() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title></title></head><body><p>esto funca</p></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title></title><link rel=\"stylesheet\" href=\"/static/css/index.css\"><link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css\" rel=\"stylesheet\"><link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB\" crossorigin=\"anonymous\"><link href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script></head><body><div class=\"dashboard\"><header><img src=\"/static/images/logo.svg\" alt=\"Logo\" id=\"Logo\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		return nil
-	})
-}
-
-func indexLayout() templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
+		templ_7745c5c3_Err = GameSearch(searchedGames).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<img src=\"/static/images/user_icon.svg\" alt=\"User Icon\" id=\"User-Icon\"><p id=\"username-display\">User</p></header><div class=\"popular-games\"><div class=\"popular-header\"><h2>Popular Games</h2><div class=\"header-icon\"><i class=\"bi bi-alarm\"></i></div></div><div class=\"game-list\"><div class=\"game-card\"><div class=\"game-image\"><img src=\"/static/images/hollow_knight_hero.png\" alt=\"Hollow Knight: Silksong\"></div><div class=\"game-title\">Hollow Knight: Silksong</div></div><div class=\"game-card\"><div class=\"game-image\"><img src=\"/static/images/silent_hill_f_hero.png\" alt=\"Silent Hill: f\"></div><div class=\"game-title\">Silent Hill: f</div></div><div class=\"game-card\"><div class=\"game-image\"><img src=\"/static/images/red_dead_redemption_2_hero.png\" alt=\"Red Dead Redemption 2\"></div><div class=\"game-title\">Red Dead Redemption 2</div></div></div></div><div class=\"popular-games\"><div class=\"popular-header\"><h2>My games</h2><div class=\"header-icon\"><i class=\"bi bi-bookmark\"></i></div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
+		templ_7745c5c3_Err = GameLayout(games).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<link rel=\"stylesheet\" href=\"/static/css/index.css\"><link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css\" rel=\"stylesheet\"><link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB\" crossorigin=\"anonymous\"><link href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css\" rel=\"stylesheet\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -82,12 +71,12 @@ func LayoutLogin() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var3 == nil {
-			templ_7745c5c3_Var3 = templ.NopComponent
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<!doctype html><html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap\" rel=\"stylesheet\"><link rel=\"stylesheet\" href=\"static/styles.css\"><title>GameShelf</title></head><body><main><div id=\"login-page\"><div class=\"welcome-column\"><p id=\"welcome-to\" class=\"schibsted-grotesk white-text\">Welcome <span class=\"pink-text\">to </span></p><p id=\"game-shelf\" class=\"schibsted-grotesk white-text\">Game <span class=\"cyan-text\">Shelf</span></p></div><div class=\"login-column\"><div id=\"login-container\"><img src=\"static/images/user_icon.svg\" alt=\"user_icon\" id=\"user-icon\"><p id=\"user-login\" class=\"white-text schibsted-grotesk\">USER LOGIN</p><form id=\"login-form\" action=\"/dashboard\" method=\"post\"><input class=\"login-input\" type=\"text\" id=\"username\" name=\"username\" placeholder=\"Username\" required> <input class=\"login-input\" type=\"password\" id=\"password\" name=\"password\" placeholder=\"Password\" required> <button class=\"login-btn schibsted-grotesk\" type=\"submit\">Log In</button></form></div><p class=\"white-text schibsted-grotesk\">don't have an account? </p><a href=\"register.html\" class=\"blue-text schibsted-grotesk\">create one</a></div><div id=\"logo-column\"><img src=\"static/images/logo.svg\" alt=\"Game Shelf Logo\" id=\"login-illustration\"></div></div></main><footer></footer></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<!doctype html><html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap\" rel=\"stylesheet\"><link rel=\"stylesheet\" href=\"static/styles.css\"><title>GameShelf</title></head><body><main><div id=\"login-page\"><div class=\"welcome-column\"><p id=\"welcome-to\" class=\"schibsted-grotesk white-text\">Welcome <span class=\"pink-text\">to </span></p><p id=\"game-shelf\" class=\"schibsted-grotesk white-text\">Game <span class=\"cyan-text\">Shelf</span></p></div><div class=\"login-column\"><div id=\"login-container\"><img src=\"static/images/user_icon.svg\" alt=\"user_icon\" id=\"user-icon\"><p id=\"user-login\" class=\"white-text schibsted-grotesk\">USER LOGIN</p><form id=\"login-form\" action=\"/dashboard\" method=\"post\"><input class=\"login-input\" type=\"text\" id=\"username\" name=\"username\" placeholder=\"Username\" required> <input class=\"login-input\" type=\"password\" id=\"password\" name=\"password\" placeholder=\"Password\" required> <button class=\"login-btn schibsted-grotesk\" type=\"submit\">Log In</button></form></div><p class=\"white-text schibsted-grotesk\">don't have an account? </p><a href=\"register.html\" class=\"blue-text schibsted-grotesk\">create one</a></div><div id=\"logo-column\"><img src=\"static/images/logo.svg\" alt=\"Game Shelf Logo\" id=\"login-illustration\"></div></div></main><footer></footer></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

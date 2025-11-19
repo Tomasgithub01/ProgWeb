@@ -1,6 +1,7 @@
 package views
 
 import db "ProgWeb/db/sqlc"
+import "fmt"
 
 templ GameList(games []db.Game, sortColumn string, sortOrder string){
     <html>
@@ -8,13 +9,17 @@ templ GameList(games []db.Game, sortColumn string, sortOrder string){
     </html> 
 }
 
-templ GameLayout(games []db.Game, sortColumn, sortOrder string){
+templ GameLayout(games []db.Game){
     <div id="gameList" class="game-list">
+        <div id="add-game-card" class="game-card" data-bs-toggle="modal" data-bs-target="#addGameModal" style="cursor: pointer;">
+            <i id="add-game-icon" class="bi bi-controller"></i>
+            <div class="game-title">ADD NEW GAME</div>
+        </div>
         if len(games) > 0 {
             for _, game := range games {
                 <div class="game-card">
                     <div class="game-image">
-                        <img src="{game.Image}" alt="{game.Name}">
+                        <img src={game.Image} alt="{game.Name}">
                     </div>
                     <div class="game-name-btn">
                         <div class="game-title">{game.Name}</div>
@@ -23,21 +28,133 @@ templ GameLayout(games []db.Game, sortColumn, sortOrder string){
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" onclick="deleteGame(${game.id}, this.closest('.game-card'))">Delete</a></li>    
+                                <li>
+                                    <form action={fmt.Sprintf("/games/%d", game.ID)} method="POST" style="display:inline;">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="dropdown-item">Delete</button>
+                                    </form>
+                                </li>   
+                                <li>
+                                    <div style="display:inline;">
+                                        
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target={"#updateGameModal" + fmt.Sprintf("%d", game.ID)}>Update</button>
+                                    </div>
+                                </li>  
                             </ul>
+                            <div>@updateGameModal(game)</div>
                         </div>
                     </div>
                 </div>
             }
         } else {
-            <p>No products found.</p>
+            <p>No games added yet.</p>
         }       
+    </div>
+    @addGameModal()
+}
+
+templ GameSearch(searchedGames []db.Game) {
+    <div class="search-container">
+        <form action="/steam/search/" method="GET">
+            <input type="text" id="search" name="query" placeholder="⌕ Search on Steam..." autocomplete="off" />
+        </form>
+        <div id="results">
+        if len(searchedGames) > 0 {
+            for _, game := range searchedGames {
+                <form class="result-item" action="/games" method="POST">
+                    <input type="hidden" name="name" value={game.Name} />
+                    <input type="hidden" name="description" value="Imported from Steam" />
+                    <input type="hidden" name="image" value={fmt.Sprintf("https://cdn.cloudflare.steamstatic.com/steam/apps/%d/hero_capsule.jpg", game.ID)} />
+                    <input type="hidden" name="link" value={game.Link} />
+
+                    <button type="submit" class="result-button">
+                        <img src={game.Image} alt={game.Name} />
+                        <span>{game.Name}</span>
+                    </button>
+                </form>
+            }
+        }
+        </div>
     </div>
 }
 
-templ GameSearch(){
-    <div>
-        <input type="text" id="search" placeholder="⌕ Search on Steam..." autocomplete="off">
-        <div id="results"></div>
+templ addGameModal() {
+      <div class="modal fade" id="addGameModal" tabindex="-1" aria-labelledby="addGameModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div id="addGameModalContent" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addGameModalLabel">Add New Game</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <form id="addGameForm" action="/games" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Game Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="description" name="description" value="Imported manually">
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image URL</label>
+                            <input type="url" class="form-control" id="image" name="image">
+                        </div>
+                        <div class="mb-3">
+                            <label for="link" class="form-label">Steam Link</label>
+                            <input type="url" class="form-control" id="link" name="link">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="custom-close-btn" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="custom-save-btn">Save</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+}
+
+templ updateGameModal(game db.Game) {
+      <div class="modal fade" id={"updateGameModal" + fmt.Sprintf("%d", game.ID)} tabindex="-1" aria-labelledby="updateGameModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div id="updateGameModalContent" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateGameModalLabel">Update what you need</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <form id="addGameForm" action={fmt.Sprintf("/games/%d", game.ID)} method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Game Name</label>
+                            <input value={game.Name} type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <input value={game.Description} type="text" class="form-control" id="description" name="description" value="Imported manually">
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image URL</label>
+                            <input value={game.Image} type="url" class="form-control" id="image" name="image">
+                        </div>
+                        <div class="mb-3">
+                            <label for="link" class="form-label">Steam Link</label>
+                            <input value={game.Link} type="url" class="form-control" id="link" name="link">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="custom-close-btn" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="custom-save-btn">Save</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
 }

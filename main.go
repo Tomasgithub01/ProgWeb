@@ -76,16 +76,29 @@ func handleMain(w http.ResponseWriter, r *http.Request) {
 
 func handleDashboard(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	templ.Handler(views.LayoutIndex()).ServeHTTP(w, r)
+	games, err := queries.ListGames(ctx)
+	searchedGames := []sqlc.Game{}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	templ.Handler(views.LayoutIndex(games,searchedGames)).ServeHTTP(w, r)
 }
 
 // Handler /games
 func gamesHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		var newGame sqlc.Game
-		if err := json.NewDecoder(r.Body).Decode(&newGame); err != nil {
-			http.Error(w, "Falla del JSON", http.StatusBadRequest)
+		// Parse the form data
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "Error parsing form data", http.StatusBadRequest)
 			return
+		}
+
+		newGame := sqlc.Game{
+			Name:        r.FormValue("name"),
+			Description: r.FormValue("description"),
+			Image:       r.FormValue("image"),
+			Link:        r.FormValue("link"),
 		}
 
 		if err := logic.ValidateGame(newGame); err != nil {
@@ -93,7 +106,7 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		createdGame, err := queries.CreateGame(ctx, sqlc.CreateGameParams{
+		_, err := queries.CreateGame(ctx, sqlc.CreateGameParams{
 			Name:        newGame.Name,
 			Description: newGame.Description,
 			Image:       newGame.Image,
@@ -104,9 +117,8 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(createdGame)
+		// Redirect to reload page or show success
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 		return
 	}
 
@@ -123,7 +135,15 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handler /games/{id}
 func gameHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Game handler: path=%s method=%s\n", r.URL.Path, r.Method)
 	parts := strings.Split(r.URL.Path, "/")
+	//Simular que la peticion DELETE llega como POST (al no tener HTMX todavia usamos un formulario que solo admite GET y POST)
+	if r.Method == http.MethodPost && r.FormValue("_method") == "DELETE" {
+        r.Method = http.MethodDelete
+    }
+	if r.Method == http.MethodPost && r.FormValue("_method") == "PUT" {
+		r.Method = http.MethodPut
+	}
 	if len(parts) != 3 {
 		http.Error(w, "Invalid URL", http.StatusBadRequest)
 		return
@@ -158,22 +178,27 @@ func getGame(w http.ResponseWriter, r *http.Request, id int32) {
 }
 
 func updateGame(w http.ResponseWriter, r *http.Request, id int32) {
-	var updatedGame sqlc.Game
-	if err := json.NewDecoder(r.Body).Decode(&updatedGame); err != nil {
+	//var updatedGame sqlc.Game
+	/* if err := json.NewDecoder(r.Body).Decode(&updatedGame); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
-	}
+	} */
+	if err := r.ParseForm(); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
 
 	err := queries.UpdateGame(ctx, sqlc.UpdateGameParams{
 		ID:          id,
-		Name:        updatedGame.Name,
-		Description: updatedGame.Description,
-		Image:       updatedGame.Image,
-		Link:        updatedGame.Link,
+		Name:        r.FormValue("name"),
+		Description: r.FormValue("description"),
+		Image:       r.FormValue("image"),
+		Link:        r.FormValue("link"),
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }
 
 func deleteGame(w http.ResponseWriter, r *http.Request, id int32) {
@@ -181,7 +206,9 @@ func deleteGame(w http.ResponseWriter, r *http.Request, id int32) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-	w.WriteHeader(http.StatusNoContent)
+	//w.WriteHeader(http.StatusNoContent)
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+
 }
 
 // ================== Users ==================
@@ -421,7 +448,24 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	json.NewEncoder(w).Encode(data["items"])
+	searchedGames := []sqlc.Game{}
+	games, err := queries.ListGames(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	for _, item := range data["items"].([]interface{}) {
+		game := sqlc.Game{
+			ID:   int32(item.(map[string]interface{})["id"].(float64)),
+			Name: item.(map[string]interface{})["name"].(string),
+			Image: item.(map[string]interface{})["tiny_image"].(string),
+			Link:  fmt.Sprintf("https://store.steampowered.com/app/%d", int32(item.(map[string]interface{})["id"].(float64))),
+		}
+		log.Printf("Juego %s\n", game.Name)
+		searchedGames = append(searchedGames, game)
+		
+	}
+	log.Printf("Total juegos encontrados: %d\n", len(searchedGames))
+	
+	templ.Handler(views.LayoutIndex(games,searchedGames)).ServeHTTP(w, r)
 }

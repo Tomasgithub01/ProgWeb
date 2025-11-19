@@ -87,6 +87,69 @@ p {
   gap: 5px;
 }
 
+#add-game-card {
+  border: #FFFFFF 10px dashed;
+  transition: background-color 0.3s ease;
+}
+
+#add-game-card:hover {
+  border: #FFFFFF 10px dashed;
+   background: rgba(0, 0, 0, 0.09);
+}
+
+
+
+.modal-content {
+  --bs-modal-bg: rgba(21, 29, 87, 1);
+  --bs-modal-color : #FFFFFF;
+  color: white; 
+}
+
+
+
+#addGameModal input {
+  background-color: #131730;
+  border: #FFFFFF 1px solid;
+  color: #fff;
+}
+
+.custom-close-btn {
+  background-color: #434977;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-family: "Schibsted Grotesk", sans-serif;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-close-btn:hover {
+  background-color: #626cb3;
+}
+
+.custom-save-btn {
+  background-color: #59CBCB;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-family: "Schibsted Grotesk", sans-serif;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-save-btn:hover {
+  background-color: #198D8D;
+}
+
+
+#add-game-icon {
+  font-size: 6rem;
+  color: #FFFFFF;
+  margin-top: 3rem;
+}
+
 .game-image {
   width: 100%;
   height: 229px;
@@ -150,17 +213,24 @@ header {
   border: none;
   padding: 10px 20px;
   margin: 0;
+  
+}
+
+#search-input {
+  border: none;
+  outline: none;
+  background-color: transparent;
 }
 
 #Logo {
-  margin-right: 4vw;
+  margin-right: 3vw;
 }
 
 #User-Icon {
   width: 7vw;
   height: 7vh;
   margin: 0;
-  margin-left: 4vw;
+  margin-left: 2vw;
 }
 #username-display {
   color: #FFFFFF;
@@ -175,6 +245,7 @@ header {
   align-items: center;
   padding: 5px;
   cursor: pointer;
+  
   margin-top: 1vh;
   margin-bottom: 1vh;
   margin-left: 1vw;
@@ -182,8 +253,26 @@ header {
   background: #626cb3;
 }
 
+.result-item .result-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.search-container {
+  position: relative;  
+  width: 40vw;        
+  margin: 0 auto;     
+}
+
+
 #results {
   border: none;
+  display: block;
   box-shadow: #000000 0px 0px 10px;
   border-radius: 20px;
   background: #434977;
@@ -191,7 +280,6 @@ header {
   width: 40vw;
   max-height: 300px;
   overflow-y: auto;
-  display: none;
   z-index: 9999; 
   font-family: "Schibsted Grotesk", sans-serif;
   color: #FFFFFF;
