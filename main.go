@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/a-h/templ"
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 )
 
@@ -37,11 +38,15 @@ func main() {
 	http.HandleFunc("/", handleMain)
 
 	// Handler del dashboard
-	http.HandleFunc("/dashboard", handleDashboard)
+	http.HandleFunc("/dashboard", requireLogin(handleDashboard))
+	http.HandleFunc("/logout", logoutHandler)
 
 	// Servir archivos estáticos (CSS, JS, imágenes)
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	//Logeo
+	http.HandleFunc("/login", loginHandler)
 
 	// Handlers de API
 	http.HandleFunc("/games", gamesHandler)
@@ -71,6 +76,12 @@ func handleMain(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	//http.ServeFile(w, r, "static/login.html")
+
+	if currentUser(r) != nil {
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+		return
+	}
+
 	templ.Handler(views.LayoutLogin()).ServeHTTP(w, r)
 }
 
@@ -78,11 +89,12 @@ func handleDashboard(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	games, err := queries.ListGames(ctx)
 	searchedGames := []sqlc.Game{}
+	user := currentUser(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	templ.Handler(views.LayoutIndex(games,searchedGames)).ServeHTTP(w, r)
+	templ.Handler(views.LayoutIndex(games, searchedGames, user)).ServeHTTP(w, r)
 }
 
 // Handler /games
@@ -139,8 +151,8 @@ func gameHandler(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	//Simular que la peticion DELETE llega como POST (al no tener HTMX todavia usamos un formulario que solo admite GET y POST)
 	if r.Method == http.MethodPost && r.FormValue("_method") == "DELETE" {
-        r.Method = http.MethodDelete
-    }
+		r.Method = http.MethodDelete
+	}
 	if r.Method == http.MethodPost && r.FormValue("_method") == "PUT" {
 		r.Method = http.MethodPut
 	}
@@ -184,9 +196,9 @@ func updateGame(w http.ResponseWriter, r *http.Request, id int32) {
 		return
 	} */
 	if err := r.ParseForm(); err != nil {
-        http.Error(w, err.Error(), http.StatusBadRequest)
-        return
-    }
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	err := queries.UpdateGame(ctx, sqlc.UpdateGameParams{
 		ID:          id,
@@ -215,16 +227,35 @@ func deleteGame(w http.ResponseWriter, r *http.Request, id int32) {
 
 func usersHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		var newUser sqlc.User
-		if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
+		//var newUser sqlc.User
+		/* if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
+		} */
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		newUser := sqlc.User{
+			Name:     r.FormValue("username"),
+			Password: r.FormValue("password"),
 		}
 		if err := logic.ValidateUser(newUser); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		createdUser, err := queries.CreateUser(ctx, sqlc.CreateUserParams{
+
+		existing, err := queries.GetUserByName(ctx, newUser.Name)
+		if err == nil && existing.ID != 0 {
+			http.Error(w, "El usuario ya existe", http.StatusConflict)
+			return
+		}
+		if strings.Contains(err.Error(), "duplicate key") {
+			http.Error(w, "El usuario ya existe", http.StatusConflict)
+			return
+		}
+
+		_, err = queries.CreateUser(ctx, sqlc.CreateUserParams{
 			Name:     newUser.Name,
 			Password: newUser.Password,
 		})
@@ -232,9 +263,11 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(createdUser)
+		//w.Header().Set("Content-Type", "application/json")
+		//w.WriteHeader(http.StatusCreated)
+		//fmt.Fprintf(w, "Usuario creado con éxito")
+		//json.NewEncoder(w).Encode(createdUser)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	if r.Method == http.MethodGet {
@@ -456,16 +489,99 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, item := range data["items"].([]interface{}) {
 		game := sqlc.Game{
-			ID:   int32(item.(map[string]interface{})["id"].(float64)),
-			Name: item.(map[string]interface{})["name"].(string),
+			ID:    int32(item.(map[string]interface{})["id"].(float64)),
+			Name:  item.(map[string]interface{})["name"].(string),
 			Image: item.(map[string]interface{})["tiny_image"].(string),
 			Link:  fmt.Sprintf("https://store.steampowered.com/app/%d", int32(item.(map[string]interface{})["id"].(float64))),
 		}
 		log.Printf("Juego %s\n", game.Name)
 		searchedGames = append(searchedGames, game)
-		
+
 	}
 	log.Printf("Total juegos encontrados: %d\n", len(searchedGames))
-	
-	templ.Handler(views.LayoutIndex(games,searchedGames)).ServeHTTP(w, r)
+
+	user := currentUser(r)
+	templ.Handler(views.LayoutIndex(games, searchedGames, user)).ServeHTTP(w, r)
+}
+
+// Aca vemos si podemos hacer lo de inicio de sesión.
+// store de auth state en memoria (por ahora simple)
+var sessions = map[string]int32{}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "Bad Request", http.StatusBadRequest)
+			return
+		}
+
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+
+		user, err := queries.GetUserByName(ctx, username)
+		if err != nil || user.Password != password {
+			http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+			return
+		}
+
+		// generar session id (token corto que representa el auth state)
+		sessionID := uuid.NewString()
+		sessions[sessionID] = user.ID
+
+		cookie := http.Cookie{
+			Name:     "session",
+			Value:    sessionID,
+			Path:     "/",
+			HttpOnly: true, // recomendado en teoría
+		}
+
+		http.SetCookie(w, &cookie)
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+		return
+	}
+
+	http.NotFound(w, r)
+}
+
+func currentUser(r *http.Request) *sqlc.User {
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		return nil
+	}
+
+	uid, ok := sessions[cookie.Value]
+	if !ok {
+		return nil
+	}
+
+	user, err := queries.GetUser(ctx, uid)
+	if err != nil {
+		return nil
+	}
+
+	return &user
+}
+
+func requireLogin(handler http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if currentUser(r) == nil {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+		handler(w, r)
+	}
+}
+
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+	cookie, _ := r.Cookie("session")
+	delete(sessions, cookie.Value)
+
+	expired := http.Cookie{
+		Name:   "session",
+		Value:  "",
+		MaxAge: -1,
+		Path:   "/",
+	}
+	http.SetCookie(w, &expired)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

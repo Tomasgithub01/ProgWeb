@@ -22,6 +22,7 @@ CREATE TABLE users (
     password varchar(255) not null,
     CONSTRAINT pk_users PRIMARY KEY (id)
 );
+ALTER TABLE users ADD CONSTRAINT users_name_key UNIQUE(name);
 
 CREATE TABLE plays (
     id_game int not null,

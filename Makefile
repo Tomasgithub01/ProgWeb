@@ -15,5 +15,8 @@ testdev:
 	@sleep 30
 	hurl --test script.hurl
 
-generate: 
+templ: 
 	go run github.com/a-h/templ/cmd/templ@latest generate
+
+sqlc:
+	go run github.com/sqlc-dev/sqlc/cmd/sqlc@latest generate
