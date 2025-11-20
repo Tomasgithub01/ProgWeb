@@ -5,10 +5,12 @@ package views
 
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
-import "github.com/a-h/templ"
-import templruntime "github.com/a-h/templ/runtime"
+import (
+	"github.com/a-h/templ"
+	templruntime "github.com/a-h/templ/runtime"
 
-import db "ProgWeb/db/sqlc"
+	db "ProgWeb/db/sqlc"
+)
 
 func LayoutIndex(games []db.Game, searchedGames []db.Game, user *db.User) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -39,20 +41,20 @@ func LayoutIndex(games []db.Game, searchedGames []db.Game, user *db.User) templ.
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<img src=\"/static/images/user_icon.svg\" alt=\"User Icon\" id=\"User-Icon\"><p id=\"username-display\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div id=\"user-profile-menu\"><img src=\"/static/images/user_icon.svg\" alt=\"User Icon\" id=\"User-Icon\"><div id=\"user-info\"><p id=\"username-display\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(user.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout.templ`, Line: 23, Col: 55}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout.templ`, Line: 25, Col: 64}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p></header><div class=\"popular-games\"><div class=\"popular-header\"><h2>Popular Games</h2><div class=\"header-icon\"><i class=\"bi bi-alarm\"></i></div></div><div class=\"game-list\"><div class=\"game-card\"><div class=\"game-image\"><img src=\"/static/images/hollow_knight_hero.png\" alt=\"Hollow Knight: Silksong\"></div><div class=\"game-title\">Hollow Knight: Silksong</div></div><div class=\"game-card\"><div class=\"game-image\"><img src=\"/static/images/silent_hill_f_hero.png\" alt=\"Silent Hill: f\"></div><div class=\"game-title\">Silent Hill: f</div></div><div class=\"game-card\"><div class=\"game-image\"><img src=\"/static/images/red_dead_redemption_2_hero.png\" alt=\"Red Dead Redemption 2\"></div><div class=\"game-title\">Red Dead Redemption 2</div></div></div></div><div class=\"popular-games\"><div class=\"popular-header\"><h2>My games</h2><div class=\"header-icon\"><i class=\"bi bi-bookmark\"></i></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p><a href=\"/logout\" id=\"logout-button\">Logout</a></div></div></header><div class=\"popular-games\"><div class=\"popular-header\"><h2>Popular Games</h2><div class=\"header-icon\"><i class=\"bi bi-alarm\"></i></div></div><div class=\"game-list\"><div class=\"game-card\"><div class=\"game-image\"><img src=\"/static/images/hollow_knight_hero.png\" alt=\"Hollow Knight: Silksong\"></div><div class=\"game-title\">Hollow Knight: Silksong</div></div><div class=\"game-card\"><div class=\"game-image\"><img src=\"/static/images/silent_hill_f_hero.png\" alt=\"Silent Hill: f\"></div><div class=\"game-title\">Silent Hill: f</div></div><div class=\"game-card\"><div class=\"game-image\"><img src=\"/static/images/red_dead_redemption_2_hero.png\" alt=\"Red Dead Redemption 2\"></div><div class=\"game-title\">Red Dead Redemption 2</div></div></div></div><div class=\"popular-games\"><div class=\"popular-header\"><h2>My games</h2><div class=\"header-icon\"><i class=\"bi bi-bookmark\"></i></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
