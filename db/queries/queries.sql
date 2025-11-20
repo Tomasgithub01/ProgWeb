@@ -21,7 +21,14 @@ ORDER BY name;
 -- name: ListGamesByUserID :many
 SELECT g.* 
 FROM game g JOIN plays p ON (g.id = p.id_game)
-WHERE p.id_user = $1;
+WHERE p.id_user = $1
+ORDER BY p.id_game;
+
+-- name: ListPlaysByUserID :many
+SELECT p.* 
+FROM game g JOIN plays p ON (g.id = p.id_game)
+WHERE p.id_user = $1
+ORDER BY p.id_game;
 
 -- name: UpdateGame :exec
 UPDATE game 
