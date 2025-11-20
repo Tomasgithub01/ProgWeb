@@ -92,12 +92,21 @@ func handleDashboard(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	user := currentUser(r)
 	games, err := queries.ListGamesByUserID(ctx, user.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	plays, err := queries.ListPlaysByUserID(ctx, user.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	searchedGames := []sqlc.Game{}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	templ.Handler(views.LayoutIndex(games, searchedGames, user)).ServeHTTP(w, r)
+	templ.Handler(views.LayoutIndex(games, searchedGames, user, plays)).ServeHTTP(w, r)
 }
 
 // Handler /games
@@ -512,6 +521,11 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	plays, err := queries.ListPlaysByUserID(ctx, user.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	for _, item := range data["items"].([]interface{}) {
 		game := sqlc.Game{
 			ID:    int32(item.(map[string]interface{})["id"].(float64)),
@@ -525,7 +539,7 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Total juegos encontrados: %d\n", len(searchedGames))
 
-	templ.Handler(views.LayoutIndex(games, searchedGames, user)).ServeHTTP(w, r)
+	templ.Handler(views.LayoutIndex(games, searchedGames, user, plays)).ServeHTTP(w, r)
 }
 
 // Aca vemos si podemos hacer lo de inicio de sesión.

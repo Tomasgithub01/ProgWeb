@@ -9,15 +9,21 @@ templ GameList(games []db.Game, sortColumn string, sortOrder string){
     </html> 
 }
 
-templ GameLayout(games []db.Game, user *db.User){
+
+templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
     <div id="gameList" class="game-list">
         <div id="add-game-card" class="game-card" data-bs-toggle="modal" data-bs-target="#addGameModal" style="cursor: pointer;">
             <i id="add-game-icon" class="bi bi-controller"></i>
             <div class="game-title">ADD NEW GAME</div>
         </div>
         if len(games) > 0 {
-            for _, game := range games {
+            for i, game := range games {
                 <div class="game-card">
+                    <div class="state-icon-container">
+                        <div class="state-icon">
+                            @StateIcon(plays[i].State.(string))
+                        </div>
+                    </div>
                     <div class="game-image">
                         <img src={game.Image} alt="{game.Name}">
                     </div>
@@ -157,4 +163,18 @@ templ updateGameModal(game db.Game) {
             </div>
         </div>
     </div>
+}
+
+templ StateIcon(state string) {
+    if state == "Started" {
+       <i class="fa-solid fa-gamepad"></i>
+    } else if state == "Completed" {
+       <i class="fa-solid fa-star"></i>
+    } else if state == "Full Completed" {
+        <i class="fa-solid fa-medal"></i>
+    } else if state == "Abandoned" {
+        <i class="fa-solid fa-heart-crack"></i>
+    } else {
+        <i class="fa-solid fa-bookmark"></i>
+    }
 }

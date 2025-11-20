@@ -255,6 +255,7 @@ const listGamesByUserID = `-- name: ListGamesByUserID :many
 SELECT g.id, g.name, g.description, g.image, g.link 
 FROM game g JOIN plays p ON (g.id = p.id_game)
 WHERE p.id_user = $1
+ORDER BY p.id_game
 `
 
 func (q *Queries) ListGamesByUserID(ctx context.Context, idUser int32) ([]Game, error) {
@@ -272,6 +273,41 @@ func (q *Queries) ListGamesByUserID(ctx context.Context, idUser int32) ([]Game, 
 			&i.Description,
 			&i.Image,
 			&i.Link,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listPlaysByUserID = `-- name: ListPlaysByUserID :many
+SELECT p.id_game, p.id_user, p.state, p.rating 
+FROM game g JOIN plays p ON (g.id = p.id_game)
+WHERE p.id_user = $1
+ORDER BY p.id_game
+`
+
+func (q *Queries) ListPlaysByUserID(ctx context.Context, idUser int32) ([]Play, error) {
+	rows, err := q.db.QueryContext(ctx, listPlaysByUserID, idUser)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Play
+	for rows.Next() {
+		var i Play
+		if err := rows.Scan(
+			&i.IDGame,
+			&i.IDUser,
+			&i.State,
+			&i.Rating,
 		); err != nil {
 			return nil, err
 		}
