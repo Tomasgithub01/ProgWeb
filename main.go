@@ -102,10 +102,6 @@ func handleDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	searchedGames := []sqlc.Game{}
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	templ.Handler(views.LayoutIndex(games, searchedGames, user, plays)).ServeHTTP(w, r)
 }
 
