@@ -8,10 +8,20 @@ SELECT *
 FROM game
 WHERE id = $1;
 
+-- name: GetGameByName :one
+SELECT * 
+FROM game 
+WHERE name = $1;
+
 -- name: ListGames :many
 SELECT *
 FROM game
 ORDER BY name;
+
+-- name: ListGamesByUserID :many
+SELECT g.* 
+FROM game g JOIN plays p ON (g.id = p.id_game)
+WHERE p.id_user = $1;
 
 -- name: UpdateGame :exec
 UPDATE game 
@@ -52,8 +62,8 @@ FROM users
 ORDER BY name;
 
 -- name: CreateUserPlaysGame :one
-INSERT INTO plays (id_game, id_user, state, rating)
-VALUES ($1, $2, $3, $4)
+INSERT INTO plays (id_game, id_user)
+VALUES ($1, $2)
 RETURNING id_game, id_user, state, rating;
 
 -- name: GetUserPlaysGame :one

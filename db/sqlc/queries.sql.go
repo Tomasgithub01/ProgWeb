@@ -72,25 +72,18 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const createUserPlaysGame = `-- name: CreateUserPlaysGame :one
-INSERT INTO plays (id_game, id_user, state, rating)
-VALUES ($1, $2, $3, $4)
+INSERT INTO plays (id_game, id_user)
+VALUES ($1, $2)
 RETURNING id_game, id_user, state, rating
 `
 
 type CreateUserPlaysGameParams struct {
-	IDGame int32       `json:"id_game"`
-	IDUser int32       `json:"id_user"`
-	State  interface{} `json:"state"`
-	Rating interface{} `json:"rating"`
+	IDGame int32 `json:"id_game"`
+	IDUser int32 `json:"id_user"`
 }
 
 func (q *Queries) CreateUserPlaysGame(ctx context.Context, arg CreateUserPlaysGameParams) (Play, error) {
-	row := q.db.QueryRowContext(ctx, createUserPlaysGame,
-		arg.IDGame,
-		arg.IDUser,
-		arg.State,
-		arg.Rating,
-	)
+	row := q.db.QueryRowContext(ctx, createUserPlaysGame, arg.IDGame, arg.IDUser)
 	var i Play
 	err := row.Scan(
 		&i.IDGame,
@@ -144,6 +137,25 @@ WHERE id = $1
 
 func (q *Queries) GetGame(ctx context.Context, id int32) (Game, error) {
 	row := q.db.QueryRowContext(ctx, getGame, id)
+	var i Game
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Description,
+		&i.Image,
+		&i.Link,
+	)
+	return i, err
+}
+
+const getGameByName = `-- name: GetGameByName :one
+SELECT id, name, description, image, link 
+FROM game 
+WHERE name = $1
+`
+
+func (q *Queries) GetGameByName(ctx context.Context, name string) (Game, error) {
+	row := q.db.QueryRowContext(ctx, getGameByName, name)
 	var i Game
 	err := row.Scan(
 		&i.ID,
@@ -212,6 +224,41 @@ ORDER BY name
 
 func (q *Queries) ListGames(ctx context.Context) ([]Game, error) {
 	rows, err := q.db.QueryContext(ctx, listGames)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Game
+	for rows.Next() {
+		var i Game
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.Image,
+			&i.Link,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listGamesByUserID = `-- name: ListGamesByUserID :many
+SELECT g.id, g.name, g.description, g.image, g.link 
+FROM game g JOIN plays p ON (g.id = p.id_game)
+WHERE p.id_user = $1
+`
+
+func (q *Queries) ListGamesByUserID(ctx context.Context, idUser int32) ([]Game, error) {
+	rows, err := q.db.QueryContext(ctx, listGamesByUserID, idUser)
 	if err != nil {
 		return nil, err
 	}

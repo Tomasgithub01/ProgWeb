@@ -9,7 +9,7 @@ templ GameList(games []db.Game, sortColumn string, sortOrder string){
     </html> 
 }
 
-templ GameLayout(games []db.Game){
+templ GameLayout(games []db.Game, user *db.User){
     <div id="gameList" class="game-list">
         <div id="add-game-card" class="game-card" data-bs-toggle="modal" data-bs-target="#addGameModal" style="cursor: pointer;">
             <i id="add-game-icon" class="bi bi-controller"></i>
@@ -29,7 +29,7 @@ templ GameLayout(games []db.Game){
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <form action={fmt.Sprintf("/games/%d", game.ID)} method="POST" style="display:inline;">
+                                    <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <button type="submit" class="dropdown-item">Delete</button>
                                     </form>

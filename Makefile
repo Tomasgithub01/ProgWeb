@@ -20,3 +20,6 @@ templ:
 
 sqlc:
 	go run github.com/sqlc-dev/sqlc/cmd/sqlc@latest generate
+
+users:
+	curl -X GET http://localhost:8080/users

@@ -58,7 +58,7 @@ templ LayoutIndex(games []db.Game, searchedGames []db.Game, user *db.User){
                         <h2>My games</h2>
                         <div class="header-icon"><i class="bi bi-bookmark"></i></div>
                     </div>
-                    @GameLayout(games)
+                    @GameLayout(games, user)
                 </div>
     </div>
         </body>

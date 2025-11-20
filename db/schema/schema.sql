@@ -1,11 +1,12 @@
 CREATE DOMAIN state AS varchar(20) 
 CHECK (VALUE = 'Stateless' 
     OR VALUE = 'Started'
+    OR VALUE = 'Completed'
     OR VALUE = 'Full Completed'
     OR VALUE = 'Abandoned');
     
 CREATE DOMAIN rating AS integer
-CHECK (VALUE > 0 AND VALUE <= 5);
+CHECK (VALUE >= 0 AND VALUE <= 5);
 
 CREATE TABLE game (
     id serial not null,
@@ -28,7 +29,7 @@ CREATE TABLE plays (
     id_game int not null,
     id_user int not null,
     state state not null default 'Stateless',
-    rating rating,
+    rating rating not null default 0,
     CONSTRAINT pk_plays PRIMARY KEY (id_game, id_user)
 );
 

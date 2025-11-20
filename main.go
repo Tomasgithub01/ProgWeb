@@ -87,9 +87,9 @@ func handleMain(w http.ResponseWriter, r *http.Request) {
 
 func handleDashboard(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	games, err := queries.ListGames(ctx)
-	searchedGames := []sqlc.Game{}
 	user := currentUser(r)
+	games, err := queries.ListGamesByUserID(ctx, user.ID)
+	searchedGames := []sqlc.Game{}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -118,16 +118,29 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		_, err := queries.CreateGame(ctx, sqlc.CreateGameParams{
-			Name:        newGame.Name,
-			Description: newGame.Description,
-			Image:       newGame.Image,
-			Link:        newGame.Link,
-		})
-		if err != nil {
-			http.Error(w, "Falla al insertar en la base", http.StatusBadRequest)
-			return
+		var createdGame sqlc.Game
+
+		existing, err := queries.GetGameByName(ctx, newGame.Name)
+		if err == nil && existing.ID != 0 {
+			createdGame = existing
+		} else {
+			createdGame, err = queries.CreateGame(ctx, sqlc.CreateGameParams{
+				Name:        newGame.Name,
+				Description: newGame.Description,
+				Image:       newGame.Image,
+				Link:        newGame.Link,
+			})
+			if err != nil {
+				http.Error(w, "Falla al insertar en la base", http.StatusBadRequest)
+				return
+			}
 		}
+
+		user := currentUser(r)
+		_, err = queries.CreateUserPlaysGame(ctx, sqlc.CreateUserPlaysGameParams{
+			IDGame: createdGame.ID,
+			IDUser: user.ID,
+		})
 
 		// Redirect to reload page or show success
 		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
@@ -362,7 +375,10 @@ func playsHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "User not found", http.StatusBadRequest)
 			return
 		}
-		createdPlay, err := queries.CreateUserPlaysGame(ctx, sqlc.CreateUserPlaysGameParams(newPlay))
+		createdPlay, err := queries.CreateUserPlaysGame(ctx, sqlc.CreateUserPlaysGameParams{
+			IDGame: newPlay.IDGame,
+			IDUser: newPlay.IDUser,
+		})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -383,7 +399,12 @@ func playsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Handler /plays/{gameID}/{userID}
 func playHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost && r.FormValue("_method") == "DELETE" {
+		r.Method = http.MethodDelete
+	}
+
 	parts := strings.Split(r.URL.Path, "/")
 	if len(parts) != 4 {
 		http.Error(w, "Invalid URL", http.StatusBadRequest)
@@ -454,7 +475,7 @@ func deletePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-	w.WriteHeader(http.StatusNoContent)
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }
 
 // para buscar
@@ -482,7 +503,8 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	searchedGames := []sqlc.Game{}
-	games, err := queries.ListGames(ctx)
+	user := currentUser(r)
+	games, err := queries.ListGamesByUserID(ctx, user.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -500,7 +522,6 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Total juegos encontrados: %d\n", len(searchedGames))
 
-	user := currentUser(r)
 	templ.Handler(views.LayoutIndex(games, searchedGames, user)).ServeHTTP(w, r)
 }
 
