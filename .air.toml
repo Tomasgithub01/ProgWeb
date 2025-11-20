@@ -1,7 +1,7 @@
 root = "."
 tmp_dir = "tmp"
 [build]
-    cmd = "make templ && go build -buildvcs=false -o ./tmp/my-app ."
+    cmd = "go build -buildvcs=false -o ./tmp/my-app ."
     bin = "tmp/my-app"
     #bin = "my-app"
     full_bin = "tmp/my-app"

@@ -28,6 +28,11 @@ services:
         condition: service_healthy
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 2s
+      retries: 15
     environment:
       - DB_URL=postgres://admin:Admin20250915@db:5432/tpespecialweb?sslmode=disable
     volumes:

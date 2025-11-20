@@ -37,6 +37,9 @@ func main() {
 	// Handler para la página principal
 	http.HandleFunc("/", handleMain)
 
+	// Handler healthcheck
+	http.HandleFunc("/health", handleHealthcheck)
+
 	// Handler del dashboard
 	http.HandleFunc("/dashboard", requireLogin(handleDashboard))
 	http.HandleFunc("/logout", logoutHandler)
@@ -605,4 +608,10 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, &expired)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// healthcheck
+func handleHealthcheck(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
 }
