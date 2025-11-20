@@ -414,6 +414,9 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost && r.FormValue("_method") == "DELETE" {
 		r.Method = http.MethodDelete
 	}
+	if r.Method == http.MethodPost && r.FormValue("_method") == "PUT" {
+		r.Method = http.MethodPut
+	}
 
 	parts := strings.Split(r.URL.Path, "/")
 	if len(parts) != 4 {
@@ -435,7 +438,7 @@ func playHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		getPlays(w, r, int32(gameID), int32(userID))
 	case http.MethodPut:
-		updatePlays(w, r)
+		updatePlays(w, r, int32(gameID), int32(userID))
 	case http.MethodDelete:
 		deletePlays(w, r, int32(gameID), int32(userID))
 	default:
@@ -456,8 +459,8 @@ func getPlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 	json.NewEncoder(w).Encode(play)
 }
 
-func updatePlays(w http.ResponseWriter, r *http.Request) {
-	var updatedPlays sqlc.Play
+func updatePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
+	/* var updatedPlays sqlc.Play
 	if err := json.NewDecoder(r.Body).Decode(&updatedPlays); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -469,12 +472,27 @@ func updatePlays(w http.ResponseWriter, r *http.Request) {
 	if _, err := queries.GetUser(ctx, updatedPlays.IDUser); err != nil {
 		http.Error(w, "User not found", http.StatusBadRequest)
 		return
+	} */
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
-	if err := queries.UpdateUserPlaysGame(ctx, sqlc.UpdateUserPlaysGameParams(updatedPlays)); err != nil {
+
+	err := queries.UpdateState(ctx, sqlc.UpdateStateParams{
+		IDGame: gameID,
+		IDUser: userID,
+		State:  r.FormValue("state"),
+	})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+
+	/* if err := queries.UpdateUserPlaysGame(ctx, sqlc.UpdateUserPlaysGameParams(updatedPlays)); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusNoContent) */
 }
 
 func deletePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {

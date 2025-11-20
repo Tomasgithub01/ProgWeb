@@ -20,9 +20,19 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
             for i, game := range games {
                 <div class="game-card">
                     <div class="state-icon-container">
-                        <div class="state-icon">
+                        <button class="state-icon" data-bs-toggle="dropdown">
                             @StateIcon(plays[i].State.(string))
-                        </div>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="state" value="Started">
+                                        <button type="submit" class="dropdown-item">Started</button>
+                                </form>
+                            </li>
+                        </ul>
+                        
                     </div>
                     <div class="game-image">
                         <img src={game.Image} alt="{game.Name}">
