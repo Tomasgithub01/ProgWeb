@@ -23,9 +23,9 @@ func (q *Queries) AverageGameRating(ctx context.Context, idGame int32) (float64,
 }
 
 const createGame = `-- name: CreateGame :one
-INSERT INTO game (name, description, image, link) 
-VALUES ($1, $2, $3, $4)
-RETURNING id, name, description, image, link
+INSERT INTO game (name, description, image, link, custom) 
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id, name, description, image, link, custom
 `
 
 type CreateGameParams struct {
@@ -33,6 +33,7 @@ type CreateGameParams struct {
 	Description string `json:"description"`
 	Image       string `json:"image"`
 	Link        string `json:"link"`
+	Custom      string `json:"custom"`
 }
 
 func (q *Queries) CreateGame(ctx context.Context, arg CreateGameParams) (Game, error) {
@@ -41,6 +42,7 @@ func (q *Queries) CreateGame(ctx context.Context, arg CreateGameParams) (Game, e
 		arg.Description,
 		arg.Image,
 		arg.Link,
+		arg.Custom,
 	)
 	var i Game
 	err := row.Scan(
@@ -49,6 +51,7 @@ func (q *Queries) CreateGame(ctx context.Context, arg CreateGameParams) (Game, e
 		&i.Description,
 		&i.Image,
 		&i.Link,
+		&i.Custom,
 	)
 	return i, err
 }
@@ -130,7 +133,7 @@ func (q *Queries) DeleteUserPlaysGame(ctx context.Context, arg DeleteUserPlaysGa
 }
 
 const getGame = `-- name: GetGame :one
-SELECT id, name, description, image, link 
+SELECT id, name, description, image, link, custom 
 FROM game
 WHERE id = $1
 `
@@ -144,12 +147,13 @@ func (q *Queries) GetGame(ctx context.Context, id int32) (Game, error) {
 		&i.Description,
 		&i.Image,
 		&i.Link,
+		&i.Custom,
 	)
 	return i, err
 }
 
 const getGameByName = `-- name: GetGameByName :one
-SELECT id, name, description, image, link 
+SELECT id, name, description, image, link, custom 
 FROM game 
 WHERE name = $1
 `
@@ -163,6 +167,7 @@ func (q *Queries) GetGameByName(ctx context.Context, name string) (Game, error) 
 		&i.Description,
 		&i.Image,
 		&i.Link,
+		&i.Custom,
 	)
 	return i, err
 }
@@ -217,7 +222,7 @@ func (q *Queries) GetUserPlaysGame(ctx context.Context, arg GetUserPlaysGamePara
 }
 
 const listGames = `-- name: ListGames :many
-SELECT id, name, description, image, link
+SELECT id, name, description, image, link, custom
 FROM game
 ORDER BY name
 `
@@ -237,6 +242,7 @@ func (q *Queries) ListGames(ctx context.Context) ([]Game, error) {
 			&i.Description,
 			&i.Image,
 			&i.Link,
+			&i.Custom,
 		); err != nil {
 			return nil, err
 		}
@@ -252,7 +258,7 @@ func (q *Queries) ListGames(ctx context.Context) ([]Game, error) {
 }
 
 const listGamesByUserID = `-- name: ListGamesByUserID :many
-SELECT g.id, g.name, g.description, g.image, g.link 
+SELECT g.id, g.name, g.description, g.image, g.link, g.custom 
 FROM game g JOIN plays p ON (g.id = p.id_game)
 WHERE p.id_user = $1
 `
@@ -272,6 +278,7 @@ func (q *Queries) ListGamesByUserID(ctx context.Context, idUser int32) ([]Game, 
 			&i.Description,
 			&i.Image,
 			&i.Link,
+			&i.Custom,
 		); err != nil {
 			return nil, err
 		}

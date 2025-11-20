@@ -1,7 +1,7 @@
 -- name: CreateGame :one
-INSERT INTO game (name, description, image, link) 
-VALUES ($1, $2, $3, $4)
-RETURNING id, name, description, image, link;
+INSERT INTO game (name, description, image, link, custom) 
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id, name, description, image, link, custom;
 
 -- name: GetGame :one
 SELECT * 

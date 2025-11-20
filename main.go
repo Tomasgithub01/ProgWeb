@@ -114,6 +114,7 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 			Description: r.FormValue("description"),
 			Image:       r.FormValue("image"),
 			Link:        r.FormValue("link"),
+			Custom:      r.FormValue("custom"),
 		}
 
 		if err := logic.ValidateGame(newGame); err != nil {
@@ -124,7 +125,7 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 		var createdGame sqlc.Game
 
 		existing, err := queries.GetGameByName(ctx, newGame.Name)
-		if err == nil && existing.ID != 0 {
+		if err == nil && existing.ID != 0 && createdGame.Custom == "0" {
 			createdGame = existing
 		} else {
 			createdGame, err = queries.CreateGame(ctx, sqlc.CreateGameParams{
@@ -132,6 +133,7 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 				Description: newGame.Description,
 				Image:       newGame.Image,
 				Link:        newGame.Link,
+				Custom:      newGame.Custom,
 			})
 			if err != nil {
 				http.Error(w, "Falla al insertar en la base", http.StatusBadRequest)
@@ -514,10 +516,11 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, item := range data["items"].([]interface{}) {
 		game := sqlc.Game{
-			ID:    int32(item.(map[string]interface{})["id"].(float64)),
-			Name:  item.(map[string]interface{})["name"].(string),
-			Image: item.(map[string]interface{})["tiny_image"].(string),
-			Link:  fmt.Sprintf("https://store.steampowered.com/app/%d", int32(item.(map[string]interface{})["id"].(float64))),
+			ID:     int32(item.(map[string]interface{})["id"].(float64)),
+			Name:   item.(map[string]interface{})["name"].(string),
+			Image:  item.(map[string]interface{})["tiny_image"].(string),
+			Link:   fmt.Sprintf("https://store.steampowered.com/app/%d", int32(item.(map[string]interface{})["id"].(float64))),
+			Custom: "0",
 		}
 		log.Printf("Juego %s\n", game.Name)
 		searchedGames = append(searchedGames, game)

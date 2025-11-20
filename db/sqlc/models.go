@@ -10,6 +10,7 @@ type Game struct {
 	Description string `json:"description"`
 	Image       string `json:"image"`
 	Link        string `json:"link"`
+	Custom      string `json:"custom"`
 }
 
 type Play struct {

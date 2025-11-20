@@ -26,6 +26,15 @@ image: https://image.api.playstation.com/vulcan/ap/rnd/202407/0401/670c294ded3ba
 link: https://www.minecraft.net
 HTTP 303
 
+# Logout de 123
+POST http://localhost:8080/logout
+
+# Logueo con 345
+POST http://localhost:8080/login
+[Form]
+username: 345
+password: 345
+
 # Crear Juego 2
 POST http://localhost:8080/games
 [Form]
@@ -35,28 +44,8 @@ image: /static/images/hollow_knight_hero.png
 link: https://www.hollowknight.com
 HTTP 303
 
+# Logout de 345
+POST http://localhost:8080/logout
 
 
 
-# Obtener todos los juegos
-GET http://localhost:8080/games
-
-HTTP/1.1 200
-
-
-# Obtener el juego con id 2
-GET http://localhost:8080/games/2
-HTTP 200
-
-
-# Update al juego con id 2
-PUT http://localhost:8080/games/2
-[Form]
-name: Hollow Knight
-description: Metroidvania con exploración y combates desafiantes.
-image: https://i.blogs.es/0427e3/hollow-knight--0-/375_375.jpeg
-link: https://www.hollowknight.com
-HTTP 303
-
-#DELETE http://localhost:8080/games/3
-#HTTP 204

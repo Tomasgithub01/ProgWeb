@@ -14,6 +14,7 @@ CREATE TABLE game (
     description varchar(200) not null,
     image varchar(200) not null,
     link varchar(200) not null,
+    custom char(1) not null,
     CONSTRAINT pk_game PRIMARY KEY (id)
 );
 
