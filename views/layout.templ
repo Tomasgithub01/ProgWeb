@@ -19,8 +19,13 @@ templ LayoutIndex(games []db.Game, searchedGames []db.Game, user *db.User){
                 <header>
                     <img src="/static/images/logo.svg" alt="Logo" id="Logo">
                     @GameSearch(searchedGames)
-                    <img src="/static/images/user_icon.svg" alt="User Icon" id="User-Icon">
-                    <p id="username-display">User</p>
+                    <div id="user-profile-menu">
+                        <img src="/static/images/user_icon.svg" alt="User Icon" id="User-Icon">
+                        <div id="user-info">
+                            <p id="username-display">{ user.Name }</p>
+                            <a href="/logout" id="logout-button">Logout</a>
+                        </div>
+                    </div>
                 </header>
                 <div class="popular-games">
                     <div class="popular-header">
