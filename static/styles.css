@@ -90,6 +90,79 @@ body {
     height: auto;        
 }
 
+.create-one-btn{
+    border: none;
+    background: none;
+    background-color: none;
+    color: #006FFF;
+    font-weight: bold;
+}
+
+.create-one-btn:hover{
+    color: #4897ff;
+}
+
+.create-account-text{
+    margin-top: 2rem;
+}
+
+.modal-content {
+  --bs-modal-bg: rgba(21, 29, 87, 1);
+  --bs-modal-color : #FFFFFF;
+  color: white; 
+}
+
+
+
+#addGameModal input {
+  background-color: #131730;
+  border: #FFFFFF 1px solid;
+  color: #fff;
+}.modal-content {
+  --bs-modal-bg: rgba(21, 29, 87, 1);
+  --bs-modal-color : #FFFFFF;
+  color: white; 
+}
+
+
+
+#addGameModal input {
+  background-color: #131730;
+  border: #FFFFFF 1px solid;
+  color: #fff;
+}
+
+.custom-close-btn {
+  background-color: #434977;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-family: "Schibsted Grotesk", sans-serif;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-close-btn:hover {
+  background-color: #626cb3;
+}
+
+.custom-save-btn {
+  background-color: #59CBCB;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-family: "Schibsted Grotesk", sans-serif;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-save-btn:hover {
+  background-color: #198D8D;
+}
+
+
 
 #login-form{
     display: flex;

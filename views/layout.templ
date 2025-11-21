@@ -105,9 +105,12 @@ templ LayoutLogin(){
                             <input class="login-input" type="password" id="password" name="password" placeholder="Password" required>
                            <button class="login-btn schibsted-grotesk" type="submit">Log In</button>
                         </form>
+                        <div class="create-account-text">
+                            <p class="white-text schibsted-grotesk" style="margin-bottom: 0.3rem;">don't have an account? </p>
+                            <button class="schibsted-grotesk create-one-btn" data-bs-toggle="modal" data-bs-target="#createUserModal">create one</button>
+                        </div>
                     </div>
-                    <p class="white-text schibsted-grotesk">don't have an account? </p>
-                    <button class="blue-text schibsted-grotesk" data-bs-toggle="modal" data-bs-target="#createUserModal">create one</button>
+                    
                 </div>
                 <div id="logo-column">
                     <img src="static/images/logo.svg" alt="Game Shelf Logo" id="login-illustration">

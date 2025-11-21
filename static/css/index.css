@@ -94,7 +94,7 @@ p {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
   margin-left: 4vw;
   margin-right: 4vw;
   gap: 5px;
@@ -106,15 +106,21 @@ p {
     top: 5px;
     right: 5px;
     z-index: 10;
+    
 }
 
 .state-icon {
     width: 30px;  
     height: 30px;
-    border-radius: 50%;
+    max-width: 30px;
+    max-height: 30px;
     padding: 3px;
-    color:white;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    border: 1px solid #FFFFFF;
+    color:#131730;
+    background: #131730;
+    background-color: #131730;
+    box-shadow: 0 0 5px rgba(189, 0, 196, 0.8);
 }
 
 
@@ -138,7 +144,7 @@ p {
 
 
 
-#addGameModal input {
+#createUserModal input {
   background-color: #131730;
   border: #FFFFFF 1px solid;
   color: #fff;
@@ -172,6 +178,22 @@ p {
 
 .custom-save-btn:hover {
   background-color: #198D8D;
+}
+
+.dropdown-menu .dropdown-item {
+  background-color: #131730 !important;
+  color: #fff !important;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #434977 !important;
+  color: #fff !important;
+}
+
+.dropdown-menu {
+  background-color: #131730 !important;
+  border: #FFFFFF 1px solid;
+  z-index: 1000;
 }
 
 

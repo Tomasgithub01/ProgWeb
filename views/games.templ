@@ -31,6 +31,27 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
                                         <button type="submit" class="dropdown-item">Started</button>
                                 </form>
                             </li>
+                            <li>
+                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="state" value="Completed">
+                                        <button type="submit" class="dropdown-item">Completed</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="state" value="Full Completed">
+                                        <button type="submit" class="dropdown-item">Full Completed</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="state" value="Abandoned">
+                                        <button type="submit" class="dropdown-item">Abandoned</button>
+                                </form>
+                            </li>
                         </ul>
                         
                     </div>
@@ -180,14 +201,14 @@ templ updateGameModal(game db.Game) {
 
 templ StateIcon(state string) {
     if state == "Started" {
-       <i class="fa-solid fa-gamepad"></i>
+       <i class="fa-solid fa-gamepad" style="color: green;"></i>
     } else if state == "Completed" {
-       <i class="fa-solid fa-star"></i>
+       <i class="fa-solid fa-star" style="color: gold;"></i>
     } else if state == "Full Completed" {
-        <i class="fa-solid fa-medal"></i>
+        <i class="fa-solid fa-medal" style="color: silver;"></i>
     } else if state == "Abandoned" {
-        <i class="fa-solid fa-heart-crack"></i>
+        <i class="fa-solid fa-heart-crack" style="color: red;"></i>
     } else {
-        <i class="fa-solid fa-bookmark"></i>
+        <i class="fa-solid fa-bookmark" style="color: #0057c9;"></i>
     }
 }
