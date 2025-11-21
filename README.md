@@ -6,7 +6,7 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
 
 ---
 
-## Instrucciones de uso
+## 🧾 Instrucciones de uso
 
 ### Pre-requisitos
 
@@ -101,19 +101,72 @@ Completando el placeholder ${game.id} con el ID del juego obtenido desde la quer
 
 En el buscador de la parte principal, se puede buscar un juego y, al hacer clic, se envía al servidor Go, y en consecuencia, a la base de datos.
 
-## Estructura del Proyecto
+
+## 🔑 Primer Acceso y Autenticación
+
+### Crear una Cuenta
+- Haz clic en **Create one** para abrir el modal de registro.  
+- Ingresa usuario y contraseña.  
+- El sistema almacena tus credenciales en la base de datos.
+
+### Iniciar Sesión
+- Completa los campos con tus credenciales.  
+- Haz clic en **Log In**.  
+- Se envía una solicitud **POST /login** y, si el usuario existe, serás redirigido al dashboard principal (**/dashboard**).
+
+---
+
+## 🕹️ Funcionalidades del Dashboard
+
+### Buscar y Agregar Juegos de Steam
+- Usa la barra superior central para buscar juegos.  
+- La aplicación consulta la API de Steam en tiempo real.  
+- Al seleccionar un resultado, el juego se agrega automáticamente a tu catálogo personal.
+
+### Agregar Juegos Personalizados
+- En **My Games**, haz clic en la tarjeta **ADD NEW GAME**.  
+- Se abre un modal para cargar datos de juegos no presentes en Steam.  
+- La información se guarda mediante una solicitud **POST** al servidor.
+
+### Modificar y Eliminar Juegos Propios
+- Cada tarjeta de juego incluye un menú de tres puntos (⋮).  
+- Desde el dropdown puedes **Modificar** o **Eliminar** el juego.
+
+### Gestionar el Estado de los Juegos
+Cada tarjeta posee un ícono de estado en la esquina superior derecha. Permite alternar entre:
+
+- **Stateless** (representado por un bookmark)  
+- **Started** (representado por un gamepad)  
+- **Completed** (representado por una estrella)
+- **Full Completed** (representado con una medalla)  
+- **Abandoned** (representado por un corazón partido)
+
+### Cerrar Sesión
+- En la esquina superior derecha encontrarás el botón **Logout**.  
+- Cierra la sesión y redirige a la pantalla principal.
+
+
+## 🌳 Estructura del Proyecto
 
 ```text
 ProgWeb/
-├── db/                               # Esquemas, queries y código Go generado por SQLC
-├── .air.toml                         # Archivo para automatizar los cambios en el código
-├── .gitignore                        # Archivos de dependencias a ignorar
-├── index.html                        # Página principal de la app
-├── main.go                           # Código principal en Go (servidor HTTP)
-├── go.mod                            # Dependencias de Go
-├── Dockerfile                        # Imagen para la app en Go
-├── Explicacion de la Aplicación.pdf  # Documento breve donde se detalla el funcionamiento de la app
-├── docker-compose.yml                # Configuración de contenedores
-├── Makefile                          # Comandos auxiliares
-├── sqlc.yml                          # Archivo de configuración de SQLC
-└── README.md                         # Documentación del proyecto
+├── db/                               # Esquemas (schema.sql), queries (queries.sql) y código Go generado por SQLC.
+│   ├── queries
+│   │   └── queries.sql               # Consultas SQL para obtener juegos y estados (plays).
+│   ├── schema
+│   │   └── schema.sql                # Definición de tablas.
+│   └── sqlc                          # Código Go generado automáticamente.
+├── logic/                            # Lógica de negocio específica (ej: gestión de APIs).
+│   └── games.go                      # Funciones para interactuar con la API de Steam.
+├── static/                           # Recursos estáticos: CSS, imágenes, archivos JS de frontend.
+│   ├── css
+│   ├── images                        # Incluye íconos de estado y elementos de la UI.
+│   ├── js
+│   ├── index.html                    # Layouts principales de la aplicación.
+│   └── login.html
+├── views/                            # Plantillas de la interfaz de usuario escritas en Templ.
+│   ├── games.templ
+│   └── layout.templ                  # Define la estructura base del dashboard.
+├── main.go                           # Servidor HTTP principal, manejo de rutas y lógica de controlador.
+└── docker-compose.yml                # Configuración de contenedores (Go App + PostgreSQL).
+
