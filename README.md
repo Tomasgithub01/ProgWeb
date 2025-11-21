@@ -38,6 +38,7 @@ Trabajo práctico de cursada de la materia **Programación Web** de Ingeniería 
 
     Si se quiere ejecutar con un solo comando utilizar:
    IMPORTANTE: Este comando posee un sleep arbitrario entre levantar el docker y realizar el testeo con hurl.
+   Para correr testdev se necesita tener instalado hurl, se puede obtener desde esta [página](https://hurl.dev/docs/installation.html)
 
     ```bash
       make testdev
