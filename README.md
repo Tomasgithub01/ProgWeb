@@ -151,22 +151,22 @@ Cada tarjeta posee un ícono de estado en la esquina superior derecha. Permite a
 ```text
 ProgWeb/
 ├── db/                               # Esquemas (schema.sql), queries (queries.sql) y código Go generado por SQLC.
-│   ├── queries
-│   │   └── queries.sql               # Consultas SQL para obtener juegos y estados (plays).
-│   ├── schema
-│   │   └── schema.sql                # Definición de tablas.
-│   └── sqlc                          # Código Go generado automáticamente.
+│   ├── queries
+│   │   └── queries.sql               # Consultas SQL para obtener juegos y estados (plays).
+│   ├── schema
+│   │   └── schema.sql                # Definición de tablas.
+│   └── sqlc                          # Código Go generado automáticamente.
 ├── logic/                            # Lógica de negocio específica (ej: gestión de APIs).
-│   └── games.go                      # Funciones para interactuar con la API de Steam.
+│   └── games.go                      # Funciones para interactuar con la API de Steam.
 ├── static/                           # Recursos estáticos: CSS, imágenes, archivos JS de frontend.
-│   ├── css
-│   ├── images                        # Incluye íconos de estado y elementos de la UI.
-│   ├── js
-│   ├── index.html                    # Layouts principales de la aplicación.
-│   └── login.html
+│   ├── css
+│   ├── images                        # Incluye íconos de estado y elementos de la UI.
+│   ├── js
+│   ├── index.html                    # Layouts principales de la aplicación.
+│   └── login.html
 ├── views/                            # Plantillas de la interfaz de usuario escritas en Templ.
-│   ├── games.templ
-│   └── layout.templ                  # Define la estructura base del dashboard.
+│   ├── games.templ
+│   └── layout.templ                  # Define la estructura base del dashboard.
 ├── main.go                           # Servidor HTTP principal, manejo de rutas y lógica de controlador.
 └── docker-compose.yml                # Configuración de contenedores (Go App + PostgreSQL).
 
