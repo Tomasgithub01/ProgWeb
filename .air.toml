@@ -6,7 +6,7 @@ tmp_dir = "tmp"
     #bin = "my-app"
     full_bin = "tmp/my-app"
     #full_bin = "APP_ENV=dev APP_USER=air ./my-app"
-    include_ext = ["go", "tpl", "tmpl", "html", "templ"]
+    include_ext = ["go", "tpl", "tmpl", "html"]
     exclude_dir = ["tmp", "vendor", "node_modules", "db/sqlc"]
     exclude_regex = ["db/sqlc/.*"]
     delay = 1000 # milisegundos antes de recompilar

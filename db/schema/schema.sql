@@ -40,4 +40,5 @@ ALTER TABLE plays
 
 ALTER TABLE plays
     ADD CONSTRAINT fk_plays_user
-    FOREIGN KEY (id_user) REFERENCES users (id);
+    FOREIGN KEY (id_user) REFERENCES users (id)
+    ON DELETE CASCADE;

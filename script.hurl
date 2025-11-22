@@ -24,7 +24,7 @@ name: Minecraft
 description: Juego de construcción con bloques y supervivencia.
 image: https://image.api.playstation.com/vulcan/ap/rnd/202407/0401/670c294ded3baf4fa11068db2ec6758c63f7daeb266a35a1.png
 link: https://www.minecraft.net
-HTTP 303
+HTTP 200
 
 # Logout de 123
 POST http://localhost:8080/logout
@@ -42,7 +42,7 @@ name: Hollow Knight
 description: Metroidvania con exploración y combates desafiantes.
 image: /static/images/hollow_knight_hero.png
 link: https://www.hollowknight.com
-HTTP 303
+HTTP 200
 
 # Logout de 345
 POST http://localhost:8080/logout

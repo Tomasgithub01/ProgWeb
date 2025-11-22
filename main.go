@@ -152,8 +152,18 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 			IDUser: user.ID,
 		})
 
-		// Redirect to reload page or show success
-		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+		games, err := queries.ListGamesByUserID(ctx, user.ID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		plays, err := queries.ListPlaysByUserID(ctx, user.ID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		
+		views.GameLayout(games, user, plays).Render(r.Context(), w)
 		return
 	}
 
@@ -233,7 +243,20 @@ func updateGame(w http.ResponseWriter, r *http.Request, id int32) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	//http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	user := currentUser(r)
+	games, err := queries.ListGamesByUserID(ctx, user.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	plays, err := queries.ListPlaysByUserID(ctx, user.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	views.GameLayout(games, user, plays).Render(r.Context(), w)
 }
 
 func deleteGame(w http.ResponseWriter, r *http.Request, id int32) {
@@ -411,13 +434,13 @@ func playsHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handler /plays/{gameID}/{userID}
 func playHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost && r.FormValue("_method") == "DELETE" {
-		r.Method = http.MethodDelete
-	}
-	if r.Method == http.MethodPost && r.FormValue("_method") == "PUT" {
-		r.Method = http.MethodPut
-	}
-
+	//if r.Method == http.MethodPost && r.FormValue("_method") == "DELETE" {
+	//	r.Method = http.MethodDelete
+	//}
+	//if r.Method == http.MethodPost && r.FormValue("_method") == "PUT" {
+	//	r.Method = http.MethodPut
+	//}
+	log.Printf("Play handler: path=%s method=%s\n", r.URL.Path, r.Method)
 	parts := strings.Split(r.URL.Path, "/")
 	if len(parts) != 4 {
 		http.Error(w, "Invalid URL", http.StatusBadRequest)
@@ -503,7 +526,20 @@ func deletePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	games , err := queries.ListGamesByUserID(ctx, userID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	plays,  err := queries.ListPlaysByUserID(ctx, userID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	user := currentUser(r)
+
+	//http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	views.GameLayout(games, user, plays).Render(r.Context(), w)
 }
 
 // para buscar
@@ -511,7 +547,7 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Steam handler: path=%s method=%s query=%s\n", r.URL.Path, r.Method, r.URL.RawQuery)
 	query := r.URL.Query().Get("query")
 	if query == "" {
-		http.Error(w, "Missing query", http.StatusBadRequest)
+		views.GameSearchResults(nil).Render(r.Context(), w)
 		return
 	}
 
@@ -531,7 +567,7 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	searchedGames := []sqlc.Game{}
-	user := currentUser(r)
+	/* user := currentUser(r)
 	games, err := queries.ListGamesByUserID(ctx, user.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -541,7 +577,7 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	}
+	} */
 	for _, item := range data["items"].([]interface{}) {
 		game := sqlc.Game{
 			ID:     int32(item.(map[string]interface{})["id"].(float64)),
@@ -556,7 +592,8 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Total juegos encontrados: %d\n", len(searchedGames))
 
-	templ.Handler(views.LayoutIndex(games, searchedGames, user, plays)).ServeHTTP(w, r)
+	//templ.Handler(views.LayoutIndex(games, searchedGames, user, plays)).ServeHTTP(w, r)
+	views.GameSearchResults(searchedGames).Render(r.Context(), w)
 }
 
 // Aca vemos si podemos hacer lo de inicio de sesión.
