@@ -284,7 +284,7 @@ func GameSearchResults(searchedGames []db.Game) templ.Component {
 		}
 		if len(searchedGames) > 0 && searchedGames != nil {
 			for _, game := range searchedGames {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<form class=\"result-item\" hx-post=\"/games\" hx-target=\"#gameList\" hx-swap=\"outerHTML\"><input type=\"hidden\" name=\"name\" value=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<form class=\"result-item\" hx-post=\"/games\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" hx-on::after-request=\"document.getElementById('search').value = ''; document.getElementById('results').innerHTML = '';\"><input type=\"hidden\" name=\"name\" value=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

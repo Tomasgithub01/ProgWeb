@@ -105,7 +105,7 @@ templ GameSearchResults(searchedGames []db.Game) {
     <div id="results">
         if len(searchedGames) > 0 && searchedGames != nil{
             for _, game := range searchedGames {
-                <form class="result-item"  hx-post="/games" hx-target="#gameList" hx-swap="outerHTML">
+                <form class="result-item"  hx-post="/games" hx-target="#gameList" hx-swap="outerHTML" hx-on::after-request="document.getElementById('search').value = ''; document.getElementById('results').innerHTML = '';">
                     <input type="hidden" name="name" value={game.Name} />
                     <input type="hidden" name="description" value="Imported from Steam" />
                     <input type="hidden" name="image" value={fmt.Sprintf("https://cdn.cloudflare.steamstatic.com/steam/apps/%d/hero_capsule.jpg", game.ID)} />
