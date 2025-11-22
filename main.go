@@ -181,6 +181,7 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 		// Si no viene de HTMX, hacer redirect
 		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 		return
+
 	}
 
 	if r.Method == http.MethodGet {
@@ -588,15 +589,15 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Llamar a la API de Steam
-	steamURL := fmt.Sprintf("https://store.steampowered.com/api/storesearch/?term=%s&cc=us", url.QueryEscape(query))
-	log.Printf("Consultando Steam: %s\n", steamURL)
-	resp, err := http.Get(steamURL)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer resp.Body.Close()
+    // Llamar a la API de Steam
+    steamURL := fmt.Sprintf("https://store.steampowered.com/api/storesearch/?term=%s&cc=us", url.QueryEscape(query))
+    log.Printf("Consultando Steam: %s\n", steamURL)
+    resp, err := http.Get(steamURL)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    defer resp.Body.Close()
 
 	var data map[string]interface{}
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {

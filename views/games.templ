@@ -27,11 +27,13 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
                         <ul class="dropdown-menu">
                             <li>
                                 <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Started">
                                         <button type="submit" class="dropdown-item">Started</button>
                                 </form>
                             </li>
                             <li>
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                 <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Completed">
                                         <button type="submit" class="dropdown-item">Completed</button>
@@ -39,11 +41,13 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
                             </li>
                             <li>
                                 <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Full Completed">
                                         <button type="submit" class="dropdown-item">Full Completed</button>
                                 </form>
                             </li>
                             <li>
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                 <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Abandoned">
                                         <button type="submit" class="dropdown-item">Abandoned</button>
