@@ -25,29 +25,25 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="PUT">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Started">
                                         <button type="submit" class="dropdown-item">Started</button>
                                 </form>
                             </li>
                             <li>
-                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="PUT">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Completed">
                                         <button type="submit" class="dropdown-item">Completed</button>
                                 </form>
                             </li>
                             <li>
-                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="PUT">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Full Completed">
                                         <button type="submit" class="dropdown-item">Full Completed</button>
                                 </form>
                             </li>
                             <li>
-                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="PUT">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Abandoned">
                                         <button type="submit" class="dropdown-item">Abandoned</button>
                                 </form>
@@ -66,8 +62,7 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="DELETE">
+                                    <form hx-delete={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <button type="submit" class="dropdown-item">Delete</button>
                                     </form>
                                 </li>   
@@ -93,28 +88,32 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
 
 templ GameSearch(searchedGames []db.Game) {
     <div class="search-container">
-        <form action="/steam/search/" method="GET">
+        <form hx-get="/steam/search/" hx-target="#results" hx-swap="innerHTML">
             <input type="text" id="search" name="query" placeholder="⌕ Search on Steam..." autocomplete="off" />
         </form>
         <div id="results">
-        if len(searchedGames) > 0 {
-            for _, game := range searchedGames {
-                <form class="result-item" action="/games" method="POST">
-                    <input type="hidden" name="name" value={game.Name} />
-                    <input type="hidden" name="description" value="Imported from Steam" />
-                    <input type="hidden" name="image" value={fmt.Sprintf("https://cdn.cloudflare.steamstatic.com/steam/apps/%d/hero_capsule.jpg", game.ID)} />
-                    <input type="hidden" name="link" value={game.Link} />
-                    <input type="hidden" name="custom" value={game.Custom} />
-
-                    <button type="submit" class="result-button">
-                        <img src={game.Image} alt={game.Name} />
-                        <span>{game.Name}</span>
-                    </button>
-                </form>
-            }
-        }
+            @SearchResults(searchedGames)
         </div>
     </div>
+}
+
+templ SearchResults(searchedGames []db.Game) {
+    if len(searchedGames) > 0 {
+        for _, game := range searchedGames {
+            <form class="result-item" hx-post="/games" hx-target="#gameList" hx-swap="outerHTML">
+                <input type="hidden" name="name" value={game.Name} />
+                <input type="hidden" name="description" value="Imported from Steam" />
+                <input type="hidden" name="image" value={fmt.Sprintf("https://cdn.cloudflare.steamstatic.com/steam/apps/%d/hero_capsule.jpg", game.ID)} />
+                <input type="hidden" name="link" value={game.Link} />
+                <input type="hidden" name="custom" value={game.Custom} />
+
+                <button type="submit" class="result-button">
+                    <img src={game.Image} alt={game.Name} />
+                    <span>{game.Name}</span>
+                </button>
+            </form>
+        }
+    }
 }
 
 templ addGameModal() {
