@@ -151,19 +151,35 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 			IDGame: createdGame.ID,
 			IDUser: user.ID,
 		})
+		if err != nil {
+			http.Error(w, "Falla al asociar juego con usuario", http.StatusBadRequest)
+			return
+		}
 
-		games, err := queries.ListGamesByUserID(ctx, user.ID)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		// Detectar si la petición viene con HTMX
+		if r.Header.Get("HX-Request") == "true" {
+			// Re-consultar todos los juegos del usuario
+			games, err := queries.ListGamesByUserID(ctx, user.ID)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			// Re-consultar todos los plays del usuario
+			plays, err := queries.ListPlaysByUserID(ctx, user.ID)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			// Renderizamos solo el componente GameLayout (para HTMX)
+			w.Header().Set("Content-Type", "text/html")
+			views.GameLayout(games, user, plays).Render(ctx, w)
 			return
 		}
-		plays, err := queries.ListPlaysByUserID(ctx, user.ID)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		
-		views.GameLayout(games, user, plays).Render(r.Context(), w)
+
+		// Si no viene de HTMX, hacer redirect
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 		return
 	}
 
@@ -243,8 +259,8 @@ func updateGame(w http.ResponseWriter, r *http.Request, id int32) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	//http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
-	user := currentUser(r)
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	/* user := currentUser(r)
 	games, err := queries.ListGamesByUserID(ctx, user.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -256,7 +272,7 @@ func updateGame(w http.ResponseWriter, r *http.Request, id int32) {
 		return
 	}
 
-	views.GameLayout(games, user, plays).Render(r.Context(), w)
+	views.GameLayout(games, user, plays).Render(r.Context(), w) */
 }
 
 func deleteGame(w http.ResponseWriter, r *http.Request, id int32) {
@@ -509,7 +525,26 @@ func updatePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+
+	// Re-consultar datos actualizados
+	user := currentUser(r)
+	games, err := queries.ListGamesByUserID(ctx, user.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	plays, err := queries.ListPlaysByUserID(ctx, user.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Renderizar solo el componente GameLayout
+	w.Header().Set("Content-Type", "text/html")
+	views.GameLayout(games, user, plays).Render(ctx, w)
+
+	//http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 
 	/* if err := queries.UpdateUserPlaysGame(ctx, sqlc.UpdateUserPlaysGameParams(updatedPlays)); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -526,12 +561,12 @@ func deletePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-	games , err := queries.ListGamesByUserID(ctx, userID)
+	games, err := queries.ListGamesByUserID(ctx, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	plays,  err := queries.ListPlaysByUserID(ctx, userID)
+	plays, err := queries.ListPlaysByUserID(ctx, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -539,6 +574,8 @@ func deletePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 	user := currentUser(r)
 
 	//http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	// Renderizar solo el componente GameLayout
+	w.Header().Set("Content-Type", "text/html")
 	views.GameLayout(games, user, plays).Render(r.Context(), w)
 }
 
@@ -593,6 +630,7 @@ func SearchSteamGames(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Total juegos encontrados: %d\n", len(searchedGames))
 
 	//templ.Handler(views.LayoutIndex(games, searchedGames, user, plays)).ServeHTTP(w, r)
+	w.Header().Set("Content-Type", "text/html")
 	views.GameSearchResults(searchedGames).Render(r.Context(), w)
 }
 

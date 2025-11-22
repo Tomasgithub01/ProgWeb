@@ -26,29 +26,25 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="PUT">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Started">
                                         <button type="submit" class="dropdown-item">Started</button>
                                 </form>
                             </li>
                             <li>
-                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="PUT">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Completed">
                                         <button type="submit" class="dropdown-item">Completed</button>
                                 </form>
                             </li>
                             <li>
-                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="PUT">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Full Completed">
                                         <button type="submit" class="dropdown-item">Full Completed</button>
                                 </form>
                             </li>
                             <li>
-                                <form action={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} method="POST" style="display:inline;">
-                                        <input type="hidden" name="_method" value="PUT">
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Abandoned">
                                         <button type="submit" class="dropdown-item">Abandoned</button>
                                 </form>
@@ -135,7 +131,7 @@ templ addGameModal() {
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
 
-                <form id="addGameForm" hx-post="/games" hx-target="#gameList" hx-swap="outerHTML">
+                <form id="addGameForm" action="/games" method="POST">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="name" class="form-label">Game Name</label>
@@ -176,8 +172,8 @@ templ updateGameModal(game db.Game) {
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
 
-                <form id="addGameForm" hx-put={fmt.Sprintf("/games/%d", game.ID)} hx-target="#gameList" hx-swap="innerHTML">
-                    
+                <form id="addGameForm" action={fmt.Sprintf("/games/%d", game.ID)} method="POST">
+                    <input type="hidden" name="_method" value="PUT">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="name" class="form-label">Game Name</label>
@@ -199,10 +195,7 @@ templ updateGameModal(game db.Game) {
 
                     <div class="modal-footer">
                         <button type="button" class="custom-close-btn" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="custom-save-btn" data-bs-dismiss="modal">
-                            Update
-                        </button>
-                        
+                        <button type="submit" class="custom-save-btn">Save</button>
                     </div>
                 </form>
 
