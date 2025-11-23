@@ -17,6 +17,7 @@ import (
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
 	_ "github.com/lib/pq"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var queries *sqlc.Queries
@@ -306,9 +307,12 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		password := []byte(newUser.Password)
+		hashedPassword, err := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+
 		_, err = queries.CreateUser(ctx, sqlc.CreateUserParams{
 			Name:     newUser.Name,
-			Password: newUser.Password,
+			Password: string(hashedPassword),
 		})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -638,8 +642,16 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		password := r.FormValue("password")
 
 		user, err := queries.GetUserByName(ctx, username)
-		if err != nil || user.Password != password {
-			http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+		if err != nil {
+			http.Error(w, "Username does not exist", http.StatusUnauthorized)
+			return
+		}
+
+		hashedPasswordFromDB := []byte(user.Password)
+		passwordFromLogin := []byte(password)
+		err = bcrypt.CompareHashAndPassword(hashedPasswordFromDB, passwordFromLogin)
+		if err != nil {
+			http.Error(w, "Password is incorrect", http.StatusUnauthorized)
 			return
 		}
 

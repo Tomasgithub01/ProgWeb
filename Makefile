@@ -49,3 +49,6 @@ generate:
 
 health:
 	@curl -f http://localhost:8080/health
+
+db_console:
+	docker exec -it tpespecial_db psql -U admin -d tpespecialweb
