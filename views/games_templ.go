@@ -410,7 +410,7 @@ func addGameModal() templ.Component {
 			templ_7745c5c3_Var20 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<div class=\"modal fade\" id=\"addGameModal\" tabindex=\"-1\" aria-labelledby=\"addGameModalLabel\" aria-hidden=\"true\"><div class=\"modal-dialog\"><div id=\"addGameModalContent\" class=\"modal-content\"><div class=\"modal-header\"><h5 class=\"modal-title\" id=\"addGameModalLabel\">Add New Game</h5><button type=\"button\" class=\"btn-close btn-close-white\" data-bs-dismiss=\"modal\" aria-label=\"Cerrar\"></button></div><form id=\"addGameForm\" action=\"/games\" method=\"POST\"><div class=\"modal-body\"><div class=\"mb-3\"><label for=\"name\" class=\"form-label\">Game Name</label> <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" required></div><div class=\"mb-3\"><label for=\"description\" class=\"form-label\">Description</label> <input type=\"text\" class=\"form-control\" id=\"description\" name=\"description\" value=\"Imported manually\"></div><div class=\"mb-3\"><label for=\"image\" class=\"form-label\">Image URL</label> <input type=\"url\" class=\"form-control\" id=\"image\" name=\"image\"></div><div class=\"mb-3\"><label for=\"link\" class=\"form-label\">Steam Link</label> <input type=\"url\" class=\"form-control\" id=\"link\" name=\"link\"></div><input type=\"hidden\" name=\"custom\" value=\"1\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"custom-close-btn\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"custom-save-btn\">Save</button></div></form></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<div class=\"modal fade\" id=\"addGameModal\" tabindex=\"-1\" aria-labelledby=\"addGameModalLabel\" aria-hidden=\"true\"><div class=\"modal-dialog\"><div id=\"addGameModalContent\" class=\"modal-content\"><div class=\"modal-header\"><h5 class=\"modal-title\" id=\"addGameModalLabel\">Add New Game</h5><button type=\"button\" class=\"btn-close btn-close-white\" data-bs-dismiss=\"modal\" aria-label=\"Cerrar\"></button></div><form id=\"addGameForm\" hx-post=\"/games\" hx-target=\"#gameList\" hx-swap=\"outerHTML\"><div class=\"modal-body\"><div class=\"mb-3\"><label for=\"name\" class=\"form-label\">Game Name</label> <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" required></div><div class=\"mb-3\"><label for=\"description\" class=\"form-label\">Description</label> <input type=\"text\" class=\"form-control\" id=\"description\" name=\"description\" value=\"Imported manually\"></div><div class=\"mb-3\"><label for=\"image\" class=\"form-label\">Image URL</label> <input type=\"url\" class=\"form-control\" id=\"image\" name=\"image\"></div><div class=\"mb-3\"><label for=\"link\" class=\"form-label\">Steam Link</label> <input type=\"url\" class=\"form-control\" id=\"link\" name=\"link\"></div><input type=\"hidden\" name=\"custom\" value=\"1\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"custom-close-btn\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"custom-save-btn\" data-bs-dismiss=\"modal\">Save</button></div></form></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -446,33 +446,33 @@ func updateGameModal(game db.Game) templ.Component {
 		var templ_7745c5c3_Var22 string
 		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs("updateGameModal" + fmt.Sprintf("%d", game.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 167, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 166, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\" tabindex=\"-1\" aria-labelledby=\"updateGameModalLabel\" aria-hidden=\"true\"><div class=\"modal-dialog\"><div id=\"updateGameModalContent\" class=\"modal-content\"><div class=\"modal-header\"><h5 class=\"modal-title\" id=\"updateGameModalLabel\">Update what you need</h5><button type=\"button\" class=\"btn-close btn-close-white\" data-bs-dismiss=\"modal\" aria-label=\"Cerrar\"></button></div><form id=\"addGameForm\" action=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\" tabindex=\"-1\" aria-labelledby=\"updateGameModalLabel\" aria-hidden=\"true\"><div class=\"modal-dialog\"><div id=\"updateGameModalContent\" class=\"modal-content\"><div class=\"modal-header\"><h5 class=\"modal-title\" id=\"updateGameModalLabel\">Update what you need</h5><button type=\"button\" class=\"btn-close btn-close-white\" data-bs-dismiss=\"modal\" aria-label=\"Cerrar\"></button></div><form id=\"addGameForm\" hx-put=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var23 templ.SafeURL
-		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinURLErrs(fmt.Sprintf("/games/%d", game.ID))
+		var templ_7745c5c3_Var23 string
+		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/games/%d", game.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 175, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 174, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "\" method=\"POST\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"><div class=\"modal-body\"><div class=\"mb-3\"><label for=\"name\" class=\"form-label\">Game Name</label> <input value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "\" hx-target=\"#gameList\" hx-swap=\"innerHTML\"><div class=\"modal-body\"><div class=\"mb-3\"><label for=\"name\" class=\"form-label\">Game Name</label> <input value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var24 string
 		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 180, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 178, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 		if templ_7745c5c3_Err != nil {
@@ -485,7 +485,7 @@ func updateGameModal(game db.Game) templ.Component {
 		var templ_7745c5c3_Var25 string
 		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(game.Description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 184, Col: 58}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 182, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 		if templ_7745c5c3_Err != nil {
@@ -498,7 +498,7 @@ func updateGameModal(game db.Game) templ.Component {
 		var templ_7745c5c3_Var26 string
 		templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(game.Image)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 188, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 186, Col: 52}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 		if templ_7745c5c3_Err != nil {
@@ -511,13 +511,13 @@ func updateGameModal(game db.Game) templ.Component {
 		var templ_7745c5c3_Var27 string
 		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(game.Link)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 192, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 190, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\" type=\"url\" class=\"form-control\" id=\"link\" name=\"link\"></div></div><div class=\"modal-footer\"><button type=\"button\" class=\"custom-close-btn\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"custom-save-btn\">Save</button></div></form></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\" type=\"url\" class=\"form-control\" id=\"link\" name=\"link\"></div></div><div class=\"modal-footer\"><button type=\"button\" class=\"custom-close-btn\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"custom-save-btn\" data-bs-dismiss=\"modal\">Update</button></div></form></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -131,7 +131,7 @@ templ addGameModal() {
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
 
-                <form id="addGameForm" action="/games" method="POST">
+                <form id="addGameForm" hx-post="/games" hx-target="#gameList" hx-swap="outerHTML">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="name" class="form-label">Game Name</label>
@@ -151,10 +151,9 @@ templ addGameModal() {
                         </div>
                             <input type="hidden" name="custom" value="1">
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="custom-close-btn" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="custom-save-btn">Save</button>
+                        <button type="submit" class="custom-save-btn" data-bs-dismiss="modal">Save</button>
                     </div>
                 </form>
 
@@ -172,8 +171,7 @@ templ updateGameModal(game db.Game) {
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
 
-                <form id="addGameForm" action={fmt.Sprintf("/games/%d", game.ID)} method="POST">
-                    <input type="hidden" name="_method" value="PUT">
+                <form id="addGameForm" hx-put={fmt.Sprintf("/games/%d", game.ID)} hx-target="#gameList" hx-swap="innerHTML">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="name" class="form-label">Game Name</label>
@@ -192,10 +190,11 @@ templ updateGameModal(game db.Game) {
                             <input value={game.Link} type="url" class="form-control" id="link" name="link">
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="custom-close-btn" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="custom-save-btn">Save</button>
+                        <button type="submit" class="custom-save-btn" data-bs-dismiss="modal">
+                            Update
+                        </button>
                     </div>
                 </form>
 
