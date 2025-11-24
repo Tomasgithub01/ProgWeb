@@ -160,13 +160,13 @@ func GameLayout(games []db.Game, user *db.User, plays []db.Play) templ.Component
 				var templ_7745c5c3_Var9 string
 				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/plays/%d/%d", game.ID, user.ID))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 67, Col: 93}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 67, Col: 97}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" class=\"dropdown-item\">Delete</button></li>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" hx-target=\"closest .game-card\" hx-swap=\"outerHTML\" hx-confirm=\"Are you sure you want to delete the game from your list?\" class=\"dropdown-item\">Delete</button></li>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

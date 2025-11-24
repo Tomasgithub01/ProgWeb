@@ -172,6 +172,40 @@ func (q *Queries) GetGameByName(ctx context.Context, name string) (Game, error) 
 	return i, err
 }
 
+const getGamesPlays = `-- name: GetGamesPlays :many
+SELECT id_game, id_user, state, rating
+FROM plays
+WHERE id_game = $1
+`
+
+func (q *Queries) GetGamesPlays(ctx context.Context, idGame int32) ([]Play, error) {
+	rows, err := q.db.QueryContext(ctx, getGamesPlays, idGame)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Play
+	for rows.Next() {
+		var i Play
+		if err := rows.Scan(
+			&i.IDGame,
+			&i.IDUser,
+			&i.State,
+			&i.Rating,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUser = `-- name: GetUser :one
 SELECT id, name, password
 FROM users

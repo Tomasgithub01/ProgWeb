@@ -211,6 +211,11 @@ body {
 
 }
 
+.error-msg {
+  color: red;
+  font-weight: 500;
+}
+
 .login-btn:hover {
     background-color: #198D8D; 
     border-color: #0f5353;     

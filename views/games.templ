@@ -64,13 +64,13 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
                             <ul class="dropdown-menu">
                                 <li>
                                     <button
-                                    hx-delete={ fmt.Sprintf("/plays/%d/%d", game.ID, user.ID) }
-                                    hx-target="#gameList"
-                                    hx-swap="outerHTML"
-                                    class="dropdown-item"
-                                    >
-                                    Delete
-                                </button>
+                                        hx-delete={ fmt.Sprintf("/plays/%d/%d", game.ID, user.ID) }
+                                        hx-target="closest .game-card"
+                                        hx-swap="outerHTML"
+                                        hx-confirm="Are you sure you want to delete the game from your list?"
+                                        class="dropdown-item">
+                                        Delete
+                                    </button>
                                 </li>   
                                 if game.Custom == "1" {
                                     <li>

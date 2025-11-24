@@ -73,6 +73,11 @@ INSERT INTO plays (id_game, id_user)
 VALUES ($1, $2)
 RETURNING id_game, id_user, state, rating;
 
+-- name: GetGamesPlays :many
+SELECT *
+FROM plays
+WHERE id_game = $1;
+
 -- name: GetUserPlaysGame :one
 SELECT *
 FROM plays

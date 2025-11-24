@@ -89,7 +89,7 @@ func LayoutLogin() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<!doctype html><html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap\" rel=\"stylesheet\"><link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB\" crossorigin=\"anonymous\"><link href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script><link rel=\"stylesheet\" href=\"static/styles.css\"><title>GameShelf</title></head><body><main><div id=\"login-page\"><div class=\"welcome-column\"><p id=\"welcome-to\" class=\"schibsted-grotesk white-text\">Welcome <span class=\"pink-text\">to </span></p><p id=\"game-shelf\" class=\"schibsted-grotesk white-text\">Game <span class=\"cyan-text\">Shelf</span></p></div><div class=\"login-column\"><div id=\"login-container\"><img src=\"static/images/user_icon.svg\" alt=\"user_icon\" id=\"user-icon\"><p id=\"user-login\" class=\"white-text schibsted-grotesk\">USER LOGIN</p><form id=\"login-form\" action=\"/login\" method=\"post\"><input class=\"login-input\" type=\"text\" id=\"username\" name=\"username\" placeholder=\"Username\" required> <input class=\"login-input\" type=\"password\" id=\"password\" name=\"password\" placeholder=\"Password\" required> <button class=\"login-btn schibsted-grotesk\" type=\"submit\">Log In</button></form><div class=\"create-account-text\"><p class=\"white-text schibsted-grotesk\" style=\"margin-bottom: 0.3rem;\">don't have an account? </p><button class=\"schibsted-grotesk create-one-btn\" data-bs-toggle=\"modal\" data-bs-target=\"#createUserModal\">create one</button></div></div></div><div id=\"logo-column\"><img src=\"static/images/logo.svg\" alt=\"Game Shelf Logo\" id=\"login-illustration\"></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<!doctype html><html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"htmx-config\" content='{\"responseHandling\": [{\"code\":\".*\", \"swap\": true}]}'><!--all responses are swapped--><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap\" rel=\"stylesheet\"><link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB\" crossorigin=\"anonymous\"><link href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script><script src=\"https://unpkg.com/htmx.org@1.9.10\"></script><link rel=\"stylesheet\" href=\"static/styles.css\"><title>GameShelf</title></head><body><main><div id=\"login-page\"><div class=\"welcome-column\"><p id=\"welcome-to\" class=\"schibsted-grotesk white-text\">Welcome <span class=\"pink-text\">to </span></p><p id=\"game-shelf\" class=\"schibsted-grotesk white-text\">Game <span class=\"cyan-text\">Shelf</span></p></div><div class=\"login-column\"><div id=\"login-container\"><img src=\"static/images/user_icon.svg\" alt=\"user_icon\" id=\"user-icon\"><p id=\"user-login\" class=\"white-text schibsted-grotesk\">USER LOGIN</p><form id=\"login-form\" hx-post=\"/login\" hx-target=\"#loginErrors\" hx-swap=\"innerHTML\"><input class=\"login-input\" type=\"text\" id=\"username\" name=\"username\" placeholder=\"Username\" required> <input class=\"login-input\" type=\"password\" id=\"password\" name=\"password\" placeholder=\"Password\" required> <button class=\"login-btn schibsted-grotesk\" type=\"submit\">Log In</button></form><div id=\"loginErrors\"></div><div class=\"create-account-text\"><p class=\"white-text schibsted-grotesk\" style=\"margin-bottom: 0.3rem;\">don't have an account? </p><button class=\"schibsted-grotesk create-one-btn\" data-bs-toggle=\"modal\" data-bs-target=\"#createUserModal\">create one</button></div></div></div><div id=\"logo-column\"><img src=\"static/images/logo.svg\" alt=\"Game Shelf Logo\" id=\"login-illustration\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -127,6 +127,48 @@ func createUserModal() templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"modal fade\" id=\"createUserModal\" tabindex=\"-1\" aria-labelledby=\"createUserModalLabel\" aria-hidden=\"true\"><div class=\"modal-dialog\"><div id=\"createUserModalContent\" class=\"modal-content\"><div class=\"modal-header\"><h5 class=\"modal-title\" id=\"createUserModalLabel\">Create User</h5><button type=\"button\" class=\"btn-close btn-close-white\" data-bs-dismiss=\"modal\" aria-label=\"Cerrar\"></button></div><form id=\"createUserForm\" action=\"/users\" method=\"POST\"><div class=\"modal-body\"><div class=\"mb-3\"><input class=\"form-control\" type=\"text\" id=\"username\" name=\"username\" placeholder=\"Username\" required></div><div class=\"mb-3\"><input class=\"form-control\" type=\"password\" id=\"password\" name=\"password\" placeholder=\"Password\" required></div></div><div class=\"modal-footer\"><button type=\"button\" class=\"custom-close-btn\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"custom-save-btn\">Sign In</button></div></form></div></div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func LoginError(msg string) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var5 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var5 == nil {
+			templ_7745c5c3_Var5 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<p class=\"error-msg\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var6 string
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(msg)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout.templ`, Line: 164, Col: 29}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

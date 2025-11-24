@@ -272,13 +272,15 @@ func updateGame(w http.ResponseWriter, r *http.Request, id int32) {
 	views.GameLayout(games, user, plays).Render(r.Context(), w)
 }
 
+// DELETE http://localhost:8080/games/{id}
+// Su uso es interno, solo se borra un juego cuando no tiene referencias en plays
 func deleteGame(w http.ResponseWriter, r *http.Request, id int32) {
 	if err := queries.Delete(ctx, id); err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 	//w.WriteHeader(http.StatusNoContent)
-	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	//http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 
 }
 
@@ -561,7 +563,18 @@ func deletePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-	games, err := queries.ListGamesByUserID(ctx, userID)
+
+	// Si el juego ya no es referenciado por nadie lo elimino para ahorrar espacio
+	playsFromGame, err := queries.GetGamesPlays(ctx, gameID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if len(playsFromGame) == 0 {
+		deleteGame(w, r, gameID)
+	}
+
+	/* games, err := queries.ListGamesByUserID(ctx, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -571,12 +584,13 @@ func deletePlays(w http.ResponseWriter, r *http.Request, gameID, userID int32) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	user := currentUser(r)
+	user := currentUser(r) */
 
 	//http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 	// Renderizar solo el componente GameLayout
 	w.Header().Set("Content-Type", "text/html")
-	views.GameLayout(games, user, plays).Render(r.Context(), w)
+	//views.GameLayout(games, user, plays).Render(r.Context(), w)
+	w.WriteHeader(http.StatusOK)
 }
 
 // para buscar
@@ -650,7 +664,9 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 		user, err := queries.GetUserByName(ctx, username)
 		if err != nil {
-			http.Error(w, "Username does not exist", http.StatusUnauthorized)
+			//http.Error(w, "Username does not exist", http.StatusUnauthorized)
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			views.LoginError("Username or password is incorrect").Render(r.Context(), w)
 			return
 		}
 
@@ -658,7 +674,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		passwordFromLogin := []byte(password)
 		err = bcrypt.CompareHashAndPassword(hashedPasswordFromDB, passwordFromLogin)
 		if err != nil {
-			http.Error(w, "Password is incorrect", http.StatusUnauthorized)
+			//http.Error(w, "Password is incorrect", http.StatusUnauthorized)
+			//views.LoginError("Password is incorrect").Render(r.Context(), w)
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			views.LoginError("Username or password is incorrect").Render(r.Context(), w)
 			return
 		}
 
@@ -674,7 +693,9 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+		//http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+		w.Header().Set("HX-Redirect", "/dashboard")
+		w.WriteHeader(http.StatusOK)
 		return
 	}
 
