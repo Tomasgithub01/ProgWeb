@@ -122,16 +122,23 @@ func gamesHandler(w http.ResponseWriter, r *http.Request) {
 			Link:        r.FormValue("link"),
 			Custom:      r.FormValue("custom"),
 		}
+		steamID := r.FormValue("steamid")
 
 		if err := logic.ValidateGame(newGame); err != nil {
 			http.Error(w, "Falla de validar el juego", http.StatusBadRequest)
 			return
 		}
 
+		// control si no existe la imagen hero-capsule
+		resp, err := http.Head(newGame.Image)
+		if err != nil || resp.StatusCode != http.StatusOK {
+			newGame.Image = fmt.Sprintf("https://cdn.cloudflare.steamstatic.com/steam/apps/%s/library_600x900.jpg", steamID)
+		}
+
 		var createdGame sqlc.Game
 
 		existing, err := queries.GetGameByName(ctx, newGame.Name)
-		if err == nil && existing.ID != 0 && createdGame.Custom == "0" {
+		if err == nil && existing.ID != 0 && newGame.Custom == "0" {
 			createdGame = existing
 		} else {
 			createdGame, err = queries.CreateGame(ctx, sqlc.CreateGameParams{

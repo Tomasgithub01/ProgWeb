@@ -11,7 +11,7 @@ func ValidateGame(g db.Game) error {
 	if strings.TrimSpace(g.Name) == "" {
 		return errors.New("name cannot be empty")
 	}
-	if len(g.Name) > 30 {
+	if len(g.Name) > 50 {
 		return errors.New("name cannot be longer than 30 characters")
 	}
 

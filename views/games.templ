@@ -111,6 +111,7 @@ templ GameSearchResults(searchedGames []db.Game) {
                     <input type="hidden" name="image" value={fmt.Sprintf("https://cdn.cloudflare.steamstatic.com/steam/apps/%d/hero_capsule.jpg", game.ID)} />
                     <input type="hidden" name="link" value={game.Link} />
                     <input type="hidden" name="custom" value={game.Custom} />
+                    <input type="hidden" name="steamid" value={game.ID} />
 
                     <button type="submit" class="result-button">
                         <img src={game.Image} alt={game.Name} />
