@@ -30,6 +30,7 @@ body {
     animation-duration: 0.8s;          
     animation-timing-function: ease-out; 
     animation-fill-mode: backwards;  
+    text-shadow: 3px 3px 4px rgb(37, 37, 37);
 }
 
 #game-shelf{
@@ -41,6 +42,7 @@ body {
     animation-duration: 1s;          
     animation-timing-function: ease-out; 
     animation-fill-mode: backwards;  
+    text-shadow: 3px 3px 4px rgb(37, 37, 37);
 }
 
 #login-page{

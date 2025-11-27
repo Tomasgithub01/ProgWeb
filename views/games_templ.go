@@ -88,7 +88,7 @@ func GameLayout(games []db.Game, user *db.User, plays []db.Play) templ.Component
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" style=\"display:inline;\"><input type=\"hidden\" name=\"state\" value=\"Started\"> <button type=\"submit\" class=\"dropdown-item\">Started</button></form></li><li><form hx-put=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" style=\"display:inline;\"><input type=\"hidden\" name=\"state\" value=\"Stateless\"> <button type=\"submit\" class=\"dropdown-item\">Stateless</button></form></li><li><form hx-put=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -101,7 +101,7 @@ func GameLayout(games []db.Game, user *db.User, plays []db.Play) templ.Component
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" style=\"display:inline;\"><input type=\"hidden\" name=\"state\" value=\"Completed\"> <button type=\"submit\" class=\"dropdown-item\">Completed</button></form></li><li><form hx-put=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" style=\"display:inline;\"><input type=\"hidden\" name=\"state\" value=\"Started\"> <button type=\"submit\" class=\"dropdown-item\">Started</button></form></li><li><form hx-put=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -114,7 +114,7 @@ func GameLayout(games []db.Game, user *db.User, plays []db.Play) templ.Component
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" style=\"display:inline;\"><input type=\"hidden\" name=\"state\" value=\"Full Completed\"> <button type=\"submit\" class=\"dropdown-item\">Full Completed</button></form></li><li><form hx-put=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" style=\"display:inline;\"><input type=\"hidden\" name=\"state\" value=\"Completed\"> <button type=\"submit\" class=\"dropdown-item\">Completed</button></form></li><li><form hx-put=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -127,69 +127,82 @@ func GameLayout(games []db.Game, user *db.User, plays []db.Play) templ.Component
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" style=\"display:inline;\"><input type=\"hidden\" name=\"state\" value=\"Abandoned\"> <button type=\"submit\" class=\"dropdown-item\">Abandoned</button></form></li></ul></div><div class=\"game-image\"><img src=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" style=\"display:inline;\"><input type=\"hidden\" name=\"state\" value=\"Full Completed\"> <button type=\"submit\" class=\"dropdown-item\">Full Completed</button></form></li><li><form hx-put=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var7 string
-				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(game.Image)
+				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/plays/%d/%d", game.ID, user.ID))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 56, Col: 44}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 53, Col: 91}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" alt=\"{game.Name}\"></div><div class=\"game-name-btn\"><div class=\"game-title\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" style=\"display:inline;\"><input type=\"hidden\" name=\"state\" value=\"Abandoned\"> <button type=\"submit\" class=\"dropdown-item\">Abandoned</button></form></li></ul></div><div class=\"game-image\"><img src=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var8 string
-				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
+				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(game.Image)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 59, Col: 58}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 62, Col: 44}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</div><div class=\"dropend position-static\"><button type=\"button\" class=\"btn btn-outline-primary\" style=\"--bs-btn-border-color: none;\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\"><i class=\"fas fa-ellipsis-v\"></i></button><ul class=\"dropdown-menu\"><li><button hx-delete=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\" alt=\"{game.Name}\"></div><div class=\"game-name-btn\"><div class=\"game-title\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var9 string
-				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/plays/%d/%d", game.ID, user.ID))
+				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 67, Col: 97}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 65, Col: 58}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" hx-target=\"closest .game-card\" hx-swap=\"outerHTML\" hx-confirm=\"Are you sure you want to delete the game from your list?\" class=\"dropdown-item\">Delete</button></li>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div><div class=\"dropend position-static\"><button type=\"button\" class=\"btn btn-outline-primary\" style=\"--bs-btn-border-color: none;\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\"><i class=\"fas fa-ellipsis-v\"></i></button><ul class=\"dropdown-menu\"><li><button hx-delete=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var10 string
+				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/plays/%d/%d", game.ID, user.ID))
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 73, Col: 97}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" hx-target=\"closest .game-card\" hx-swap=\"outerHTML\" hx-confirm=\"Are you sure you want to delete the game from your list?\" class=\"dropdown-item\">Delete</button></li>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				if game.Custom == "1" {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<li><div style=\"display:inline;\"><button type=\"button\" class=\"dropdown-item\" data-bs-toggle=\"modal\" data-bs-target=\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<li><div style=\"display:inline;\"><button type=\"button\" class=\"dropdown-item\" data-bs-toggle=\"modal\" data-bs-target=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var10 string
-					templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs("#updateGameModal" + fmt.Sprintf("%d", game.ID))
+					var templ_7745c5c3_Var11 string
+					templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs("#updateGameModal" + fmt.Sprintf("%d", game.ID))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 78, Col: 174}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 84, Col: 174}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\">Update</button></div></li>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\">Update</button></div></li>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</ul><div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</ul><div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -197,18 +210,18 @@ func GameLayout(games []db.Game, user *db.User, plays []db.Play) templ.Component
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</div></div></div></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</div></div></div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<p>No games added yet.</p>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<p>No games added yet.</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -236,12 +249,12 @@ func GameSearch(searchedGames []db.Game) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var11 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var11 == nil {
-			templ_7745c5c3_Var11 = templ.NopComponent
+		templ_7745c5c3_Var12 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var12 == nil {
+			templ_7745c5c3_Var12 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<div class=\"search-container\"><form><input type=\"text\" id=\"search\" name=\"query\" hx-get=\"/steam/search/\" hx-trigger=\"input delay:500ms\" hx-target=\"#results\" hx-swap=\"outerHTML\" placeholder=\"⌕ Search on Steam...\" autocomplete=\"off\"></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<div class=\"search-container\"><form><input type=\"text\" id=\"search\" name=\"query\" hx-get=\"/steam/search/\" hx-trigger=\"input delay:500ms\" hx-target=\"#results\" hx-swap=\"outerHTML\" placeholder=\"⌕ Search on Steam...\" autocomplete=\"off\"></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -249,7 +262,7 @@ func GameSearch(searchedGames []db.Game) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -273,128 +286,128 @@ func GameSearchResults(searchedGames []db.Game) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var12 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var12 == nil {
-			templ_7745c5c3_Var12 = templ.NopComponent
+		templ_7745c5c3_Var13 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var13 == nil {
+			templ_7745c5c3_Var13 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<div id=\"results\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<div id=\"results\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if len(searchedGames) > 0 && searchedGames != nil {
 			for _, game := range searchedGames {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<form class=\"result-item\" hx-post=\"/games\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" hx-on::after-request=\"document.getElementById('search').value = ''; document.getElementById('results').innerHTML = '';\"><input type=\"hidden\" name=\"name\" value=\"")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var13 string
-				templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 109, Col: 69}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "\"> <input type=\"hidden\" name=\"description\" value=\"Imported from Steam\"> <input type=\"hidden\" name=\"image\" value=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "<form class=\"result-item\" hx-post=\"/games\" hx-target=\"#gameList\" hx-swap=\"outerHTML\" hx-on::after-request=\"document.getElementById('search').value = ''; document.getElementById('results').innerHTML = '';\"><input type=\"hidden\" name=\"name\" value=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var14 string
-				templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("https://cdn.cloudflare.steamstatic.com/steam/apps/%d/hero_capsule.jpg", game.ID))
+				templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 111, Col: 154}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 115, Col: 69}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\"> <input type=\"hidden\" name=\"link\" value=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\"> <input type=\"hidden\" name=\"description\" value=\"Imported from Steam\"> <input type=\"hidden\" name=\"image\" value=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var15 string
-				templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(game.Link)
+				templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("https://cdn.cloudflare.steamstatic.com/steam/apps/%d/hero_capsule.jpg", game.ID))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 112, Col: 69}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 117, Col: 154}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\"> <input type=\"hidden\" name=\"custom\" value=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\"> <input type=\"hidden\" name=\"link\" value=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var16 string
-				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(game.Custom)
+				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(game.Link)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 113, Col: 73}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 118, Col: 69}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "\"> <input type=\"hidden\" name=\"steamid\" value=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "\"> <input type=\"hidden\" name=\"custom\" value=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var17 string
-				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(game.ID)
+				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(game.Custom)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 114, Col: 70}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 119, Col: 73}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\"> <button type=\"submit\" class=\"result-button\"><img src=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\"> <input type=\"hidden\" name=\"steamid\" value=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var18 string
-				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(game.Image)
+				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(game.ID)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 117, Col: 44}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 120, Col: 70}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\" alt=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\"> <button type=\"submit\" class=\"result-button\"><img src=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var19 string
-				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
+				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(game.Image)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 117, Col: 60}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 123, Col: 44}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\"> <span>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\" alt=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var20 string
 				templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 118, Col: 40}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 123, Col: 60}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "</span></button></form>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "\"> <span>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var21 string
+				templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 124, Col: 40}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "</span></button></form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -418,12 +431,12 @@ func addGameModal() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var21 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var21 == nil {
-			templ_7745c5c3_Var21 = templ.NopComponent
+		templ_7745c5c3_Var22 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var22 == nil {
+			templ_7745c5c3_Var22 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<div class=\"modal fade\" id=\"addGameModal\" tabindex=\"-1\" aria-labelledby=\"addGameModalLabel\" aria-hidden=\"true\"><div class=\"modal-dialog\"><div id=\"addGameModalContent\" class=\"modal-content\"><div class=\"modal-header\"><h5 class=\"modal-title\" id=\"addGameModalLabel\">Add New Game</h5><button type=\"button\" class=\"btn-close btn-close-white\" data-bs-dismiss=\"modal\" aria-label=\"Cerrar\"></button></div><form id=\"addGameForm\" hx-post=\"/games\" hx-target=\"#gameList\" hx-swap=\"outerHTML\"><div class=\"modal-body\"><div class=\"mb-3\"><label for=\"name\" class=\"form-label\">Game Name</label> <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" required></div><div class=\"mb-3\"><label for=\"description\" class=\"form-label\">Description</label> <input type=\"text\" class=\"form-control\" id=\"description\" name=\"description\" value=\"Imported manually\"></div><div class=\"mb-3\"><label for=\"image\" class=\"form-label\">Image URL</label> <input type=\"url\" class=\"form-control\" id=\"image\" name=\"image\"></div><div class=\"mb-3\"><label for=\"link\" class=\"form-label\">Steam Link</label> <input type=\"url\" class=\"form-control\" id=\"link\" name=\"link\"></div><input type=\"hidden\" name=\"custom\" value=\"1\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"custom-close-btn\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"custom-save-btn\" data-bs-dismiss=\"modal\">Save</button></div></form></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<div class=\"modal fade\" id=\"addGameModal\" tabindex=\"-1\" aria-labelledby=\"addGameModalLabel\" aria-hidden=\"true\"><div class=\"modal-dialog\"><div id=\"addGameModalContent\" class=\"modal-content\"><div class=\"modal-header\"><h5 class=\"modal-title\" id=\"addGameModalLabel\">Add New Game</h5><button type=\"button\" class=\"btn-close btn-close-white\" data-bs-dismiss=\"modal\" aria-label=\"Cerrar\"></button></div><form id=\"addGameForm\" hx-post=\"/games\" hx-target=\"#gameList\" hx-swap=\"outerHTML\"><div class=\"modal-body\"><div class=\"mb-3\"><label for=\"name\" class=\"form-label\">Game Name</label> <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" required></div><div class=\"mb-3\"><label for=\"description\" class=\"form-label\">Description</label> <input type=\"text\" class=\"form-control\" id=\"description\" name=\"description\" value=\"Imported manually\"></div><div class=\"mb-3\"><label for=\"image\" class=\"form-label\">Image URL</label> <input type=\"url\" class=\"form-control\" id=\"image\" name=\"image\"></div><div class=\"mb-3\"><label for=\"link\" class=\"form-label\">Steam Link</label> <input type=\"url\" class=\"form-control\" id=\"link\" name=\"link\"></div><input type=\"hidden\" name=\"custom\" value=\"1\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"custom-close-btn\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"custom-save-btn\" data-bs-dismiss=\"modal\">Save</button></div></form></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -447,90 +460,90 @@ func updateGameModal(game db.Game) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var22 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var22 == nil {
-			templ_7745c5c3_Var22 = templ.NopComponent
+		templ_7745c5c3_Var23 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var23 == nil {
+			templ_7745c5c3_Var23 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<div class=\"modal fade\" id=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var23 string
-		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs("updateGameModal" + fmt.Sprintf("%d", game.ID))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 167, Col: 80}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "\" tabindex=\"-1\" aria-labelledby=\"updateGameModalLabel\" aria-hidden=\"true\"><div class=\"modal-dialog\"><div id=\"updateGameModalContent\" class=\"modal-content\"><div class=\"modal-header\"><h5 class=\"modal-title\" id=\"updateGameModalLabel\">Update what you need</h5><button type=\"button\" class=\"btn-close btn-close-white\" data-bs-dismiss=\"modal\" aria-label=\"Cerrar\"></button></div><form id=\"addGameForm\" hx-put=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<div class=\"modal fade\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var24 string
-		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/games/%d", game.ID))
+		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs("updateGameModal" + fmt.Sprintf("%d", game.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 175, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 173, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "\" hx-target=\"#gameList\" hx-swap=\"innerHTML\"><div class=\"modal-body\"><div class=\"mb-3\"><label for=\"name\" class=\"form-label\">Game Name</label> <input value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "\" tabindex=\"-1\" aria-labelledby=\"updateGameModalLabel\" aria-hidden=\"true\"><div class=\"modal-dialog\"><div id=\"updateGameModalContent\" class=\"modal-content\"><div class=\"modal-header\"><h5 class=\"modal-title\" id=\"updateGameModalLabel\">Update what you need</h5><button type=\"button\" class=\"btn-close btn-close-white\" data-bs-dismiss=\"modal\" aria-label=\"Cerrar\"></button></div><form id=\"addGameForm\" hx-put=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var25 string
-		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
+		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/games/%d", game.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 179, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 181, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "\" type=\"text\" class=\"form-control\" id=\"name\" name=\"name\"></div><div class=\"mb-3\"><label for=\"description\" class=\"form-label\">Description</label> <input value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "\" hx-target=\"#gameList\" hx-swap=\"innerHTML\"><div class=\"modal-body\"><div class=\"mb-3\"><label for=\"name\" class=\"form-label\">Game Name</label> <input value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var26 string
-		templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(game.Description)
+		templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(game.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 183, Col: 58}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 185, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "\" type=\"text\" class=\"form-control\" id=\"description\" name=\"description\" value=\"Imported manually\"></div><div class=\"mb-3\"><label for=\"image\" class=\"form-label\">Image URL</label> <input value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "\" type=\"text\" class=\"form-control\" id=\"name\" name=\"name\"></div><div class=\"mb-3\"><label for=\"description\" class=\"form-label\">Description</label> <input value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var27 string
-		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(game.Image)
+		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(game.Description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 187, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 189, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\" type=\"url\" class=\"form-control\" id=\"image\" name=\"image\"></div><div class=\"mb-3\"><label for=\"link\" class=\"form-label\">Steam Link</label> <input value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\" type=\"text\" class=\"form-control\" id=\"description\" name=\"description\" value=\"Imported manually\"></div><div class=\"mb-3\"><label for=\"image\" class=\"form-label\">Image URL</label> <input value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var28 string
-		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(game.Link)
+		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(game.Image)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 191, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 193, Col: 52}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "\" type=\"url\" class=\"form-control\" id=\"link\" name=\"link\"></div></div><div class=\"modal-footer\"><button type=\"button\" class=\"custom-close-btn\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"custom-save-btn\" data-bs-dismiss=\"modal\">Update</button></div></form></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "\" type=\"url\" class=\"form-control\" id=\"image\" name=\"image\"></div><div class=\"mb-3\"><label for=\"link\" class=\"form-label\">Steam Link</label> <input value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var29 string
+		templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(game.Link)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/games.templ`, Line: 197, Col: 51}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "\" type=\"url\" class=\"form-control\" id=\"link\" name=\"link\"></div></div><div class=\"modal-footer\"><button type=\"button\" class=\"custom-close-btn\" data-bs-dismiss=\"modal\">Close</button> <button type=\"submit\" class=\"custom-save-btn\" data-bs-dismiss=\"modal\">Update</button></div></form></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -554,33 +567,33 @@ func StateIcon(state string) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var29 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var29 == nil {
-			templ_7745c5c3_Var29 = templ.NopComponent
+		templ_7745c5c3_Var30 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var30 == nil {
+			templ_7745c5c3_Var30 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		if state == "Started" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "<i class=\"fa-solid fa-gamepad\" style=\"color: green;\"></i>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "<i class=\"fa-solid fa-gamepad\" style=\"color: green;\"></i>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else if state == "Completed" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "<i class=\"fa-solid fa-star\" style=\"color: gold;\"></i>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<i class=\"fa-solid fa-star\" style=\"color: gold;\"></i>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else if state == "Full Completed" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<i class=\"fa-solid fa-medal\" style=\"color: silver;\"></i>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "<i class=\"fa-solid fa-medal\" style=\"color: silver;\"></i>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else if state == "Abandoned" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "<i class=\"fa-solid fa-heart-crack\" style=\"color: red;\"></i>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "<i class=\"fa-solid fa-heart-crack\" style=\"color: red;\"></i>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "<i class=\"fa-solid fa-bookmark\" style=\"color: #0057c9;\"></i>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, "<i class=\"fa-solid fa-bookmark\" style=\"color: #0057c9;\"></i>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

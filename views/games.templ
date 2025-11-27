@@ -27,6 +27,12 @@ templ GameLayout(games []db.Game, user *db.User, plays []db.Play) {
                         <ul class="dropdown-menu">
                             <li>
                                 <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
+                                        <input type="hidden" name="state" value="Stateless">
+                                        <button type="submit" class="dropdown-item">Stateless</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form hx-put={fmt.Sprintf("/plays/%d/%d", game.ID, user.ID)} hx-target="#gameList" hx-swap="outerHTML" style="display:inline;">
                                         <input type="hidden" name="state" value="Started">
                                         <button type="submit" class="dropdown-item">Started</button>
                                 </form>
